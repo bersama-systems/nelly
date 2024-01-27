@@ -20,7 +20,7 @@
         <td><%= book.category %></td>
         <td><%= book.price %></td>
         <td><%= link_to 'edit', edit_book_path(book.id) %></td>
-        <td><%= link_to 'delete', book_path(book.id), method: 'DELETE', data: {confirm: 'sure?'} %> </td>
+        <td><%= link_to 'delete', book_path(book.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %></td>
     </tr>
     <% end %>
 </tbody>

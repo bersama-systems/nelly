@@ -19,6 +19,7 @@ class BooksController < ApplicationController
             render 'new'
         end
     end
+    
 
     def edit
         @book = Book.find_by(id: params[:id])
@@ -28,7 +29,7 @@ class BooksController < ApplicationController
     def update
         @book = Book.find_by(id: params[:id])
         if @book.update(book_params)
-            redirect_to '/books', notice: 'Updated!'
+            redirect_to books_path, notice: 'Updated!'
         else 
             render 'new'
         end
@@ -37,6 +38,7 @@ class BooksController < ApplicationController
     def destroy 
         @book = Book.find_by(id: params[:id])
         @book.destroy
+        redirect_to books_path, notice: "Deleted!"
     end
    
     private
