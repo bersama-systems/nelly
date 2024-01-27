@@ -1,0 +1,32 @@
+
+
+<h1>Book Index</h1>
+
+<%=link_to 'New', new_book_path%>
+
+<table>
+    <thead>
+        <tr>
+            <td>Title</td>
+            <td>Category</td>
+            <td>Price</td>
+        </tr>
+    </thead>
+    
+<tbody>
+    <% @books.each do |book|%>
+    <tr>
+        <td><%= link_to book.title, book_path(book.id) %></td>
+        <td><%= book.category %></td>
+        <td><%= book.price %></td>
+        <td><%= link_to 'edit', edit_book_path(book.id) %></td>
+        <td><%= link_to 'delete', book_path(book.id), method: 'DELETE', data: {confirm: 'sure?'} %> </td>
+    </tr>
+    <% end %>
+</tbody>
+
+</table>
+
+
+
+

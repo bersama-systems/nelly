@@ -1,0 +1,15 @@
+<h1>new book:</h1>
+
+<%= form_for @book do |form| %>
+    <%= form.label :title %>
+    <%= form.text_field :title, required: true %>
+    
+    <%= form.label :category %>
+    <%= form.text_field :category, required: true %>
+
+    <%= form.label :price %>
+    <%= form.text_field :price, required: true %>
+
+    <%= form.submit %>
+<% end %>
+

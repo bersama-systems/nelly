@@ -1,0 +1,22 @@
+
+<ul>
+    <li>
+    <%= @book.title %>
+    </li>
+
+    <li>
+        <%= @book.category %>
+    </li>
+
+    <li>
+        <%= @book.price %>
+    </li>
+</ul>
+
+<%= link_to 'Back', books_path %>
+
+<style>
+li{
+    display: inline-block;
+}
+</style>
