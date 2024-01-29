@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5eefa7ca-65c1-4714-a747-a714be3cecb3" name="Changes" comment="adding rails auth app">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Apps/authApp/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Apps/authApp/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Apps/authApp/config/credentials.yml.enc" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/config/credentials.yml.enc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Apps/authApp/scripts/fake_authed_show_users.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/scripts/fake_authed_show_users.sh" afterDir="false" />
-    </list>
+    <list default="true" id="5eefa7ca-65c1-4714-a747-a714be3cecb3" name="Changes" comment="adding rails auth app" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -198,7 +192,7 @@
       <workItem from="1706247883905" duration="839000" />
       <workItem from="1706303098702" duration="10193000" />
       <workItem from="1706315645184" duration="8413000" />
-      <workItem from="1706339031595" duration="9661000" />
+      <workItem from="1706339031595" duration="10438000" />
     </task>
     <task id="LOCAL-00001" summary="adding rails auth app">
       <option name="closed" value="true" />
