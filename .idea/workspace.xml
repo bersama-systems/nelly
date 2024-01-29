@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="5eefa7ca-65c1-4714-a747-a714be3cecb3" name="Changes" comment="adding rails auth app">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Apps/authApp/scripts/fake_authed_create_user.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/scripts/fake_authed_create_user.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Apps/authApp/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Apps/authApp/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Apps/authApp/config/credentials.yml.enc" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/config/credentials.yml.enc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Apps/authApp/scripts/fake_authed_show_users.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Apps/authApp/scripts/fake_authed_show_users.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,23 +32,23 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/joshuateitelbaum/Code/nelly/Apps/authApp/scripts",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ruby.rails.projectView.checked": "true",
-    "ruby.structure.view.model.defaults.configured": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/joshuateitelbaum/Code/nelly/Apps/authApp/scripts&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ruby.rails.projectView.checked&quot;: &quot;true&quot;,
+    &quot;ruby.structure.view.model.defaults.configured&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Apps/authApp/scripts" />
@@ -59,7 +61,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Docker.Apps/authApp/Dockerfile base">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="nelly" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -153,6 +155,36 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
+    <configuration name="Apps/authApp/Dockerfile base" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="registry.docker.comlibraryruby$RUBY_VERSION-slim_base" />
+          <option name="buildCliOptions" value="--target base" />
+          <option name="buildKitEnabled" value="true" />
+          <option name="buildOnly" value="true" />
+          <option name="sourceFilePath" value="Apps/authApp/Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile" />
+      <method v="2" />
+    </configuration>
+    <configuration name="authApp/Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="sourceFilePath" value="Apps/authApp/Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.Apps/authApp/Dockerfile base" />
+        <item itemvalue="Docker.authApp/Dockerfile" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -165,7 +197,8 @@
       <workItem from="1706246528697" duration="1351000" />
       <workItem from="1706247883905" duration="839000" />
       <workItem from="1706303098702" duration="10193000" />
-      <workItem from="1706315645184" duration="7356000" />
+      <workItem from="1706315645184" duration="8413000" />
+      <workItem from="1706339031595" duration="9661000" />
     </task>
     <task id="LOCAL-00001" summary="adding rails auth app">
       <option name="closed" value="true" />
