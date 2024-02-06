@@ -5,14 +5,13 @@ networks:
     external: true
 
 services:
-  app:
-    container_name: authapp
+  nginx:
+    image: nginx:dev
+    container_name: nginx
     build:
-      context: .
+      context: nginx/
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
-    environment:
-      RAILS_ENV: development
+      - "80:80"
     networks:
       nelly-dev:
