@@ -44,3 +44,28 @@ business organization to collaborate and set the definitions in a common and cle
 2. A healthy understanding of service discovery
 3. A healthy understanding of Redis and how it can be used as a global caching data store
 4. A healthy understanding of nginx
+5. A healthy understanding of bash ^_^
+
+
+### Directions
+in the root source diretory execute:
+```shell
+./test.sh
+```
+
+The resultant should be:
+```shell
+joshuateitelbaum@Joshuas src % ./test.sh
+[+] Running 3/0
+ ✔ Container redis   Running                                                                                                                                                                             0.0s 
+ ✔ Container nodejs  Running                                                                                                                                                                             0.0s 
+ ✔ Container nginx   Running                                                                                                                                                                             0.0s 
+NodeJS app and openresty responding and warmed up..... starting tests
+Testing massive GETS on /api/example
+Testing lower plan limit
+Got off 60 requests for lower plan limit
+Testing upper plan limit
+Got off 300 requests for upper plan limit
+*****Suite success!!!*****
+
+```

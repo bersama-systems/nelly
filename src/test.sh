@@ -1,6 +1,10 @@
 #!/bin/bash
 
-# Ensure the system is up and running
+# Start docker via docker-compose.
+
+./start.sh
+
+# Ensure the system is up and running by polling our server for a single result
 
 response=""
 var=0
@@ -20,7 +24,7 @@ if [ "$response" -ne 200 ]; then
   exit -127
 fi
 
-echo "NodeJS app responding and warmed up..... starting tests"
+echo "NodeJS app and openresty responding and warmed up..... starting tests"
 
 echo "Testing massive GETS on /api/example"
 
