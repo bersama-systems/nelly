@@ -84,11 +84,16 @@ local function find_best_match(ngx, nodes, verb, uri)
 end
 
 local function find_best_limit(ngx, node)
-    for _, limit in ipairs(node.limits) do
+    local i = 1
+    local n = #node.limits
+    while (i <= n ) do
+        limit = node.limits[i]
+        i = i + 1
         if limit and limit.condition then
          -- Evaluate the condition using loadstring
 
            ngx.log(ngx.ERR, "***** DEBUG: EVALUATING CONDITION: " .. limit.condition)
+           ngx.log(ngx.ERR, "***** DEBUG: plan is: ", ngx.var.http_x_account_plan)
             local func, err = loadstring("return " .. limit.condition)
             if not func then
                 return nil, "Failed to load condition: " .. err
