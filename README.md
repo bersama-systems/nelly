@@ -115,6 +115,6 @@ Got off 300 requests for upper plan limit
 
 Hey you know what's totally awesome?  Docker.  Even if you never installed any of this before Docker Compose is pretty
 damn awesome.  If you run the tests without ever installing the images, it will still work!  It's all idempotent on run,
-so the system will pull the images, install them, and run them basked on the Dockerfiles supplied.  Dependencies are
+so the system will pull the images, install them, and run them based on the Dockerfiles supplied.  Dependencies are
 also aptly set up as well.
 
