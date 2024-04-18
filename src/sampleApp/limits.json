@@ -1,0 +1,34 @@
+[
+  {
+    "name": "get ",
+    "verb" : "GET",
+    "uri" : "\/api\/example",
+    "limit_key":  "ngx.var.http_x_account_id .. ngx.var.request_method .. ngx.var.uri",
+    "limits" : [
+      {
+        "condition" : "ngx.var.http_x_account_plan == 1",
+        "limit": 5
+      },
+      {
+        "condition": "1 == 1",
+        "limit": 1
+      }
+    ]
+  },
+  {
+    "name": "get with id",
+    "verb" : "GET",
+    "uri" : "\/api\/example\/\\d+",
+    "limit_key":  "ngx.var.http_x_account_id .. ngx.var.request_method .. ngx.var.uri",
+    "limits" : [
+      {
+        "condition" : "ngx.var.http_x_account_plan == 1",
+        "limit": 5
+      },
+      {
+        "condition": "1 == 1",
+        "limit": 1
+      }
+    ]
+  }
+]
