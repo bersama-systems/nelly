@@ -7,6 +7,13 @@ services:
       dockerfile: Dockerfile.nodejs
     ports:
       - "3000:3000"
+  redis:
+    image: redis:6.0.10
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
   nginx:
     container_name: nginx
     build:
@@ -15,4 +22,6 @@ services:
     ports:
       - "80:80"
     depends_on:
+      - redis
       - nodejs
+

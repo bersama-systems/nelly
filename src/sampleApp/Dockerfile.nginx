@@ -1,14 +1,13 @@
-# Use the official Nginx image as base
-FROM nginx:latest
+# Use OpenResty base image
+FROM openresty/openresty:latest
 
-# Remove the default Nginx configuration file
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copy the custom Nginx configuration file
-COPY nginx.conf /etc/nginx/nginx.conf
-
+# Copy NGINX configuration file and Lua script
+COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+COPY rate_limit.lua /usr/local/openresty/lualib/rate_limit.lua
+COPY nelly_configuration.lua /usr/local/openresty/lualib/nelly_configuration.lua
+COPY limits.json /usr/local/openresty/nginx/conf/limits.json
 # Expose port 80
 EXPOSE 80
 
-# Command to start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Command to run OpenResty
+CMD ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
