@@ -165,6 +165,34 @@ local function amalgamate_key(ngx, node)
     end
 end
 
+local function apply_rate_limit(ngx, redis_key, interval, threshold)
+
+ -- Connect to Redis
+    local red = connect_to_redis()
+    if not red then
+        return nil, "could not connect to redis"
+    end
+    -- Increment the key
+    local new_value, err = red:incr(redis_key)
+    if not new_value then
+        ngx.log(ngx.ERR, "apply_rate_limit: Failed to increment Redis key: ", err)
+        return nil, err
+    end
+
+    if tonumber(new_value) == 1 then
+        local ok, err = red:expire(redis_key, interval)
+        if not ok then
+            ngx.log(ngx.ERR, "apply_rate_limit: Failed to set expiration for Redis key: ", err)
+            return nil, err
+        end
+    end
+
+    close_redis(red)
+
+   return new_value / threshold, nil
+
+end
+
 local function rate_limit(ngx, nodes, verb, uri) -- returns amount to wait, error string
 -- 1. Find the appropriate node we want to rate rate_limit
 -- 2. Execute the conditions and easy out on first match.
@@ -191,6 +219,13 @@ local function rate_limit(ngx, nodes, verb, uri) -- returns amount to wait, erro
 
    local redis_key = to_hex_string(rate_limit_key)
 
+   local limit_applied, err = apply_rate_limit(ngx, redis_key, best_limit.interval_seconds, best_limit.threshold)
+
+   if err then
+        return nil, err
+   end
+
+   return limit_applied, err
 end
 
 -- Return the function so it can be used elsewhere

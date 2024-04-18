@@ -7,11 +7,13 @@
     "limits" : [
       {
         "condition" : "ngx.var.http_x_account_plan == 1",
-        "limit": 5
+        "threshold": 300,
+        "interval_seconds": 60
       },
       {
         "condition": "1 == 1",
-        "limit": 1
+        "threshold": 60,
+        "interval_seconds": 60
       }
     ]
   },
@@ -23,11 +25,13 @@
     "limits" : [
       {
         "condition" : "ngx.var.http_x_account_plan == 1",
-        "limit": 5
+        "threshold": 300,
+        "interval_seconds": 60
       },
       {
         "condition": "1 == 1",
-        "limit": 1
+        "threshold": 60,
+        "interval_seconds": 60
       }
     ]
   }
