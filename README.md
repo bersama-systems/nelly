@@ -60,12 +60,32 @@ joshuateitelbaum@Joshuas src % ./test.sh
  ✔ Container redis   Running                                                                                                                                                                             0.0s 
  ✔ Container nodejs  Running                                                                                                                                                                             0.0s 
  ✔ Container nginx   Running                                                                                                                                                                             0.0s 
+NodeJS app and openrest[+] Running 7/7
+ ✔ redis 6 layers [⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                                                                                                                        3.5s 
+   ✔ 83c5cfdaa538 Pull complete                                                                                                                                                                          0.7s 
+   ✔ af69b9847230 Pull complete                                                                                                                                                                          0.3s 
+   ✔ 47328343a4f2 Pull complete                                                                                                                                                                          0.4s 
+   ✔ a8bdd61c4004 Pull complete                                                                                                                                                                          0.9s 
+   ✔ 6cd44fea95ad Pull complete                                                                                                                                                                          0.8s 
+   ✔ 797e3a88bf94 Pull complete                                                                                                                                                                          1.1s 
+[+] Running 5/5
+ ✔ Network sampleapp_default                                                                                                                            Created                                          0.0s 
+ ✔ Container nodejs                                                                                                                                     Started                                          0.2s 
+ ✔ Container redis                                                                                                                                      Started                                          0.2s 
+ ✔ Container nginx                                                                                                                                      Started                                          0.1s 
+ ! nginx The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested                                                  0.0s 
 NodeJS app and openresty responding and warmed up..... starting tests
 Testing massive GETS on /api/example
 Testing lower plan limit
 Got off 60 requests for lower plan limit
 Testing upper plan limit
-Got off 300 requests for upper plan limit
+Got off 60 requests for upper plan limit
 *****Suite success!!!*****
 
 ```
+
+Hey you know what's totally awesome?  Docker.  Even if you never installed any of this before Docker Compose is pretty
+damn awesome.  If you run the tests without ever installing the images, it will still work!  It's all idempotent on run,
+so the system will pull the images, install them, and run them basked on the Dockerfiles supplied.  Dependencies are
+also aptly set up as well.
+
