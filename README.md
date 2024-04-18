@@ -53,7 +53,7 @@ in the root source diretory execute:
 ./test.sh
 ```
 
-The resultant should be:
+The resultant should be something like:
 ```shell
 joshuateitelbaum@Joshuas src % ./test.sh
 [+] Running 7/7
