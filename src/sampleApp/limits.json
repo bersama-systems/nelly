@@ -6,7 +6,7 @@
     "limit_key":  "ngx.var.http_x_account_id .. ngx.var.request_method .. ngx.var.uri",
     "limits" : [
       {
-        "condition" : "ngx.var.http_x_account_plan == 1",
+        "condition" : "ngx.var.http_x_account_plan == '1'",
         "threshold": 300,
         "interval_seconds": 60
       },
@@ -24,7 +24,7 @@
     "limit_key":  "ngx.var.http_x_account_id .. ngx.var.request_method .. ngx.var.uri",
     "limits" : [
       {
-        "condition" : "ngx.var.http_x_account_plan == 1",
+        "condition" : "ngx.var.http_x_account_plan == '1'",
         "threshold": 300,
         "interval_seconds": 60
       },

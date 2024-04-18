@@ -89,7 +89,6 @@ local function find_best_limit(ngx, node)
          -- Evaluate the condition using loadstring
 
            ngx.log(ngx.ERR, "***** DEBUG: EVALUATING CONDITION: " .. limit.condition)
-
             local func, err = loadstring("return " .. limit.condition)
             if not func then
                 return nil, "Failed to load condition: " .. err
@@ -189,7 +188,9 @@ local function apply_rate_limit(ngx, redis_key, interval, threshold)
 
     close_redis(red)
 
-   return new_value / threshold, nil
+    ngx.log(ngx.ERR, "apply_rate_limit: ******* USING THRESHOLD ********* : ", threshold)
+
+    return new_value / threshold, nil
 
 end
 

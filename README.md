@@ -5,7 +5,7 @@ Interjection. whoa, Nelly. an exclamation of surprise, especially one in respons
 
 ## What is Nelly?
 
-Nelly is an NGINX <img src="./images/nginx.png" alt="drawing" height="25" width="50"/> plugin and suite that allows your organization to describe and implement your rate limits at the edge layer.  
+Nelly is an NGINX <img src="./images/nginx.png" alt="drawing" height="25" width="50"/> LUA code suite that allows your organization to describe and implement your rate limits at the edge layer.  
 
 ## Why Rate Limit?
 
@@ -33,6 +33,14 @@ Usually your organization (with remarkable success) has an oops moment and quick
 inside their flagship product.
 Firms grow, add more products and services, break up monoliths, and pretty soon the organization finds itself in an unfavorable position 
 of having to re-implement rate limits across multiple products, multiple services and multiple languages.
-Pushing rate limit to the "edge" layer, and giving it enough context to decision properly will allow uniform application of rates limits across all your 
+Pushing rate limits to the "edge" layer, and giving it enough context to decision properly will allow uniform application of rate limits across all your 
 products and services, and provide a central location for definition and configuration.   This makes it easier for your IT administration, product organization, and 
 business organization to collaborate and set the definitions in a common and clear pattern.
+
+## How to run Nelly to test it out
+
+### Prerequisistes
+1. Docker (for docker compose)
+2. A healthy understanding of service discovery
+3. A healthy understanding of Redis and how it can be used as a global caching data store
+4. A healthy understanding of nginx
