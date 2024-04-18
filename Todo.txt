@@ -2,6 +2,8 @@
 2. make sure nginx lifecycle events are subscribed to so that configuration reload can happen without process kill (Dan)
 3. get reference app up and running (Josh) done 4/13
 4. get reference app dockerized (Josh)  done 4/13
+5. In the voice of Moon Zapa, with high rising terminal, can we just like, you know, separate the compoents into separate like you know folders?
+
 
 
 
