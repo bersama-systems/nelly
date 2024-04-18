@@ -230,6 +230,5 @@ end
 
 -- Return the function so it can be used elsewhere
 return {
-    say_something_from_redis = say_something_from_redis,
     rate_limit = rate_limit
 }
