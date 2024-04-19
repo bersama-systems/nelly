@@ -3,7 +3,7 @@
 3. get reference app up and running (Josh) done 4/13
 4. get reference app dockerized (Josh)  done 4/13
 5. In the voice of Moon Zapa, with high rising terminal, can we just like, you know, separate the components into separate like you know folders?
-
+6. Eval is super bad and dum dums.  Will have to fix that through parsing.
 
 
 
