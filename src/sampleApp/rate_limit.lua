@@ -62,7 +62,10 @@ end
 local function get_key_value(limit_key)
     local extracted_name = string.match(limit_key, "ngx.var.(.+)")
     if extracted_name then
-        return ngx.var[extracted_name]
+        if ngx.var[extracted_name] then
+            return ngx.var[extracted_name]
+        end
+        return (limit_key .. ":" .. "nil")
     end
     return limit_key
 end
