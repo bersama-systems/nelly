@@ -3,8 +3,8 @@ services:
   nodejs:
     container_name: nodejs
     build:
-      context: .
-      dockerfile: Dockerfile.nodejs
+      context: ./nodejs_test_server
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
   redis:
@@ -17,8 +17,8 @@ services:
   nginx:
     container_name: nginx
     build:
-      context: .
-      dockerfile: Dockerfile.nginx
+      context: ./nginx
+      dockerfile: Dockerfile
     ports:
       - "80:80"
     depends_on:
