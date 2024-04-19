@@ -98,10 +98,7 @@ local function find_best_limit(ngx, node)
             if err then
                 ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH ERROR  ", limit.condition.name, err)
             elseif result then
-                ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH RESULT  ", limit.condition.name, result)
                 return limit, nil
-            else
-                ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH NO RESULT  ", limit.condition.name, result)
             end
         end
     end
@@ -130,13 +127,11 @@ local function amalgamate_key(ngx, node)
         return nil, "invalid limit key"
     end
 
-    ngx.log(ngx.ERR, "***** DEBUG: EVALUATING key amalgamation: ")
     local limit_key = ""
     for _, key_component in ipairs(node.limit_key) do
         limit_key = limit_key .. get_key_value(key_component)
     end
 
-    ngx.log(ngx.ERR, "***** DEBUG: EVALUATED key amalgamation: " .. limit_key)
     return limit_key, nil
 end
 
@@ -164,8 +159,6 @@ local function apply_rate_limit(ngx, redis_key, interval, threshold)
 
     close_redis(red)
 
-    ngx.log(ngx.ERR, "apply_rate_limit: ******* USING THRESHOLD ********* : ", threshold)
-
     return new_value / threshold, nil
 
 end
@@ -179,8 +172,6 @@ local function rate_limit(ngx, nodes, verb, uri) -- returns amount to wait, erro
         ngx.log(ngx.ERR, "***** DEBUG: find_best_match NO found node")
         return nil, nil
     end
-
-    ngx.log(ngx.ERR, "***** DEBUG: find_best_match found node: " .. best_node.name)
 
     local best_limit, err = find_best_limit(ngx, best_node)
 
