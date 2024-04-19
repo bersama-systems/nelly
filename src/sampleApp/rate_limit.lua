@@ -31,7 +31,7 @@ local function say_something_from_redis()
         ngx.exit(500)
         return
     end
-    
+
     -- Set a value in Redis
     local key = "mykey"
     local value = "myvalue"
@@ -59,6 +59,14 @@ local function say_something_from_redis()
     close_redis(red)
 end
 
+local function get_key_value(limit_key)
+    local extracted_name = string.match(limit_key, "ngx.var.(.+)")
+    if extracted_name then
+        return ngx.var[extracted_name]
+    end
+    return limit_key
+end
+
 local function find_best_match(ngx, nodes, verb, uri)
     local best_match = nil
     local best_score = -1
@@ -83,6 +91,35 @@ local function find_best_match(ngx, nodes, verb, uri)
     return best_match
 end
 
+local function evaluate_condition(ngx, condition)
+
+    if not (condition and condition.lhs and condition.rhs and condition.operator) then
+        return nil, "Invalid condition encountered: " .. condition.name
+    end
+
+    local lhs_val = get_key_value(condition.lhs)
+    local rhs_val = get_key_value(condition.rhs)
+    if condition.operator == "eq" then
+        return lhs_val == rhs_val
+    end
+    if condition.operator == "neq" then
+        return lhs_val ~= rhs_val
+    end
+    if condition.operator == "lt" then
+        return lhs_val < rhs_val
+    end
+    if condition.operator == "gt" then
+        return lhs_val > rhs_val
+    end
+    if condition.operator == "lte" then
+        return lhs_val <= rhs_val
+    end
+    if condition.operator == "gte" then
+        return lhs_val >= rhs_val
+    end
+    return false
+end
+
 local function find_best_limit(ngx, node)
     local i = 1
     local n = #node.limits
@@ -90,31 +127,15 @@ local function find_best_limit(ngx, node)
         limit = node.limits[i]
         i = i + 1
         if limit and limit.condition then
-         -- Evaluate the condition using loadstring
-
-           ngx.log(ngx.ERR, "***** DEBUG: EVALUATING CONDITION: " .. limit.condition)
-           ngx.log(ngx.ERR, "***** DEBUG: plan is: ", ngx.var.http_x_account_plan)
-            local func, err = loadstring("return " .. limit.condition)
-            if not func then
-                return nil, "Failed to load condition: " .. err
-            end
-
-            -- Set the environment for the function to access ngx module
-            setfenv(func, { ngx = ngx })
-
-            -- Call the function to evaluate the condition
-            local success, result = pcall(func)
-            if not success then
-                ngx.log(ngx.ERR, "***** DEBUG: ERROR CONDITION: " .. result)
-                return nil, "Failed to evaluate condition: " .. result
-            end
-            if result then
-                ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH RESULT  ", limit.condition, result)
+            result, err = evaluate_condition(ngx, limit.condition)
+            if err then
+                ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH ERROR  ", limit.condition.name, err)
+            elseif result then
+                ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH RESULT  ", limit.condition.name, result)
                 return limit, nil
             else
-                ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH NO RESULT  ", limit.condition, result)
+                ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH NO RESULT  ", limit.condition.name, result)
             end
-
         end
     end
 
@@ -142,31 +163,14 @@ local function amalgamate_key(ngx, node)
         return nil, "invalid limit key"
     end
 
-   -- Evaluate the condition using loadstring
-
-   ngx.log(ngx.ERR, "***** DEBUG: EVALUATING key amalgamation: " .. node.limit_key)
-
-    local func, err = loadstring("return " .. node.limit_key)
-    if not func then
-        return nil, "Failed to load condition: " .. err
+    ngx.log(ngx.ERR, "***** DEBUG: EVALUATING key amalgamation: ")
+    local limit_key = ""
+    for _, key_component in ipairs(node.limit_key) do
+        limit_key = limit_key .. get_key_value(key_component)
     end
 
-    -- Set the environment for the function to access ngx module
-    setfenv(func, { ngx = ngx })
-
-    -- Call the function to evaluate the condition
-    local success, result = pcall(func)
-    if not success then
-        ngx.log(ngx.ERR, "***** DEBUG: ERROR with key amalgamation " .. result)
-        return nil, "Failed to evaluate key amalgamation: " .. result
-    end
-    if result then
-        ngx.log(ngx.ERR, "***** DEBUG: key amalgamation success  ", node.limit_key, " ", result)
-        return result, nil
-    else
-        ngx.log(ngx.ERR, "***** DEBUG: key amalgamation with failure  ", node.limit_key, " ", result)
-        return nil, "amalgamation evaluated with no result"
-    end
+    ngx.log(ngx.ERR, "***** DEBUG: EVALUATED key amalgamation: " .. limit_key)
+    return limit_key, nil
 end
 
 local function apply_rate_limit(ngx, redis_key, interval, threshold)
