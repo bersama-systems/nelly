@@ -125,23 +125,33 @@ I hope you find it interesting!!!\
 It is!  
 ```json
  {
-    "name": "get ",
-    "verb" : "GET",
-    "uri" : "\/api\/example",
-    "limit_key":  "ngx.var.http_x_account_id .. ngx.var.request_method .. ngx.var.uri",
-    "limits" : [
-      {
-        "condition" : "ngx.var.http_x_account_plan == '1'",
-        "threshold": 300,
-        "interval_seconds": 60
+  "name": "get ",
+  "verb" : "GET",
+  "uri" : "\/api\/example",
+  "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+  "limits" : [
+    {
+      "condition" : {
+        "name": "Plan Type 1",
+        "lhs": "ngx.var.http_x_account_plan",
+        "operator": "eq",
+        "rhs" : "1"
       },
-      {
-        "condition": "1 == 1",
-        "threshold": 60,
-        "interval_seconds": 60
-      }
-    ]
-  }
+      "threshold": 300,
+      "interval_seconds": 60
+    },
+    {
+      "condition": {
+        "name": "Fallback threshold",
+        "lhs": "1",
+        "operator": "eq",
+        "rhs" : "1"
+      },
+      "threshold": 60,
+      "interval_seconds": 60
+    }
+  ]
+}
 ```
 
 name: the name of the limit configuration\
