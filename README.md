@@ -146,7 +146,7 @@ It is!
 
 name: the name of the limit configuration\
 verb: the HTTP verb that is part of the selector \
-urk: the URI or path not including query parameters \
+uri: the URI or path not including query parameters \
 limit_key: how we UNIQUELY identify the counter in Redis.  Note that it uses:  Account ID (from headers), request method, and the URI \
 limits: array of plan based limits.  If an account is on the "higher" plan, it will get 300 requests per minute.  Else, the default fallback condition will be used, or 60 requests per minute
 
