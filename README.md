@@ -157,10 +157,3 @@ General principles:
 4. The engine will use redis to transact with the rate limit ledger
 5. If limit thresholds have been exceeded it limits, otherwise it lets traffic through.
 
-
-## Notes
-```lua
-loadstring -- harmful for health
-pcall -- harmful for health
-local todo = "Parse properly and use operators to get at headers, body, or params, or variables"
-```
