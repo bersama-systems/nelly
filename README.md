@@ -118,3 +118,41 @@ damn awesome.  If you run the tests without ever installing the images, it will 
 so the system will pull the images, install them, and run them based on the Dockerfiles supplied.  Dependencies are
 also aptly set up as well.
 
+## How it works
+
+Have a look at this file: https://github.com/bersama-systems/nelly/blob/main/src/sampleApp/limits.json \
+I hope you find it interesting!!!\
+It is!  
+```json
+ {
+    "name": "get ",
+    "verb" : "GET",
+    "uri" : "\/api\/example",
+    "limit_key":  "ngx.var.http_x_account_id .. ngx.var.request_method .. ngx.var.uri",
+    "limits" : [
+      {
+        "condition" : "ngx.var.http_x_account_plan == '1'",
+        "threshold": 300,
+        "interval_seconds": 60
+      },
+      {
+        "condition": "1 == 1",
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  }
+```
+
+name: the name of the limit configuration\
+verb: the HTTP verb that is part of the selector \
+urk: the URI or path not including query parameters \
+limit_key: how we UNIQUELY identify the counter in Redis.  Note that it uses:  Account ID (from headers), request method, and the URI \
+limits: array of plan based limits.  If an account is on the "higher" plan, it will get 300 requests per minute.  Else, the default fallback condition will be used, or 60 requests per minute
+
+General principles:
+1. The engine will try to find the best node match based on the incoming request URL and verb
+2. The engine will then find the best plan fit based on the professed plan
+3. The engine will then employ the amalgamation key (seeded from pretend upper layers of authentication etc) and construct a redis key that uniquely identifies this customer on this node.
+4. The engine will use redis to transact with the rate limit ledger
+5. If limit thresholds have been exceeded it limits, otherwise it lets traffic through.
