@@ -23,42 +23,6 @@ local function close_redis(red)
     end
 end
 
--- Access phase handler
-local function say_something_from_redis()
-    -- Connect to Redis
-    local red = connect_to_redis()
-    if not red then
-        ngx.exit(500)
-        return
-    end
-
-    -- Set a value in Redis
-    local key = "mykey"
-    local value = "myvalue"
-    local ok, err = red:set(key, value)
-    if not ok then
-        ngx.log(ngx.ERR, "Failed to set value in Redis: ", err)
-        close_redis(red)
-        ngx.exit(500)
-        return
-    end
-
-    -- Get a value from Redis
-    local result, err = red:get(key)
-    if not result then
-        ngx.log(ngx.ERR, "Failed to get value from Redis: ", err)
-        close_redis(red)
-        ngx.exit(500)
-        return
-    end
-
-    -- Output the result
-    ngx.say("Value retrieved from Redis: ", result)
-
-    -- Close the Redis connection
-    close_redis(red)
-end
-
 local function get_key_value(limit_key)
     local extracted_name = string.match(limit_key, "ngx.var.(.+)")
     if extracted_name then
