@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5eefa7ca-65c1-4714-a747-a714be3cecb3" name="Changes" comment="adding rails auth app">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -254,7 +255,7 @@
       <workItem from="1709915517141" duration="598000" />
       <workItem from="1709925510795" duration="597000" />
       <workItem from="1711581879415" duration="487000" />
-      <workItem from="1713039287115" duration="85025000" />
+      <workItem from="1713039287115" duration="86377000" />
     </task>
     <task id="LOCAL-00001" summary="adding rails auth app">
       <option name="closed" value="true" />
