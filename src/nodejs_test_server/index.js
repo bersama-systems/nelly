@@ -28,10 +28,11 @@ app.get('/api/example/:id', (req, res) => {
 
 app.put('/api/example/:id', (req, res) => {
   target = examples.filter((example) => example.id == req.params.id)
-  if(!target) {
+  if(!target || !target.length) {
     res.status(404).json("Not found")
     return
   }
+  target = target[0]
   if(req.body.project) {
     target.project = req.body.project
     res.status(200).json(target)
