@@ -28,7 +28,7 @@ echo "NodeJS app and openresty responding and warmed up..... starting tests"
 
 echo "Testing massive GETS on /api/example"
 
-echo "Testing lower plan limit"
+echo "Testing lower plan limit GETS"
 successful_requests=0
 account_id=$RANDOM
 for i in {1..100}
@@ -49,7 +49,7 @@ do
 done
 
 echo "Got off $successful_requests requests for lower plan limit"
-echo "Testing upper plan limit"
+echo "Testing upper plan limit GETS"
 successful_requests=0
 account_id=$RANDOM
 for i in {1..365}
@@ -65,6 +65,50 @@ do
     exit -127
   fi
 done
-echo "Got off $successful_requests requests for upper plan limit"
+echo "Got off $successful_requests requests for upper plan limit GET"
+
+
+echo "Testing massive PUTS on /api/example/1"
+
+echo "Testing lower plan limit PUTS"
+successful_requests=0
+account_id=$RANDOM
+for i in {1..100}
+do
+  value="$RANDOM foo"
+  response=$(curl -X PUT -H "Content-Type: application/json" -d "{\"project\":\"$value\"}" --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example/1)
+
+  if [ "$response" -eq 429 ]; then
+    break
+  fi
+
+  successful_requests=$((successful_requests+1))
+
+  if [ "$i" -gt 1 ];
+  then
+    echo "Rate limiting failed!!! $i"
+    exit -127
+  fi
+done
+
+echo "Got off $successful_requests requests for lower plan limit PUTS"
+echo "Testing upper plan limit PUTS"
+successful_requests=0
+account_id=$RANDOM
+for i in {1..365}
+do
+  value="$RANDOM foo"
+  response=$(curl -X PUT -H "Content-Type: application/json" -d "{\"project\":\"$value\"}" --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example/1)
+  if [ "$response" -eq 429 ]; then
+    break
+  fi
+  successful_requests=$((successful_requests+1))
+  if [ "$i" -gt 5 ];
+  then
+    echo "Rate limiting failed!!!"
+    exit -127
+  fi
+done
+echo "Got off $successful_requests requests for upper plan limit PUTS"
 
 echo "*****Suite success!!!*****"

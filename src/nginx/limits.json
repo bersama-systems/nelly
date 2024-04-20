@@ -54,5 +54,33 @@
         "interval_seconds": 60
       }
     ]
+  },
+  {
+    "name": "put with id",
+    "verb" : "PUT",
+    "uri" : "\/api\/example\/\\d+",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 5,
+        "interval_seconds": 1
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 1,
+        "interval_seconds": 1
+      }
+    ]
   }
 ]

@@ -2,6 +2,7 @@
 const express = require('express');
 
 const app = express();
+app.use(express.json());
 const port = 3000;
 
 var examples = [
@@ -26,7 +27,17 @@ app.get('/api/example/:id', (req, res) => {
 });
 
 app.put('/api/example/object/:id', (req, res) => {
-  res.send('Hello from the PUT example object API endpoint!', 200);
+  target = examples.filter((example) => example.id == req.params.id)
+  if(!target) {
+    res.status(404).json("Not found")
+    return
+  }
+  if(request.body.project) {
+    target.project = request.body.project
+    res.status(200).json(target)
+    return
+  }
+  res.status(400).json("Invalid update requested")
 });
 
 app.post('/api/example/object', (req, res) => {
