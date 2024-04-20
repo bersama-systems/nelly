@@ -12,7 +12,7 @@ local function connect_to_redis()
     return red
 end
 
--- Function to close the Redis connection
+-- Function to close the Redis connection but only after a timeout so that it goes to the pool
 local function close_redis(red)
     if not red then
         return
