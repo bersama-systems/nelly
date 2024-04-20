@@ -26,14 +26,14 @@ app.get('/api/example/:id', (req, res) => {
   res.status(200).json(examples.filter((example) => example.id == req.params.id))
 });
 
-app.put('/api/example/object/:id', (req, res) => {
+app.put('/api/example/:id', (req, res) => {
   target = examples.filter((example) => example.id == req.params.id)
   if(!target) {
     res.status(404).json("Not found")
     return
   }
-  if(request.body.project) {
-    target.project = request.body.project
+  if(req.body.project) {
+    target.project = req.body.project
     res.status(200).json(target)
     return
   }
