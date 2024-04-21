@@ -1,7 +1,7 @@
 # Nelly
 What does Whoa Nelly mean?
 Interjection. whoa, Nelly. an exclamation of surprise, especially one in response to an unexpected acceleration of speed.\
-<img src="./images/nginx_animated.gif" alt="drawing" />
+<img src="./images/horse.png" alt="drawing" />
 
 ## What is Nelly?
 
