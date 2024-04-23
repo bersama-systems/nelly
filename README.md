@@ -37,7 +37,7 @@ Pushing rate limits to the "edge" layer, and giving it enough context to decisio
 products and services, and provide a central location for definition and configuration.   This makes it easier for your IT administration, product organization, and 
 business organization to collaborate and set the definitions in a common and clear pattern.
 But my rate limiting at the controller has all the context it needs and at Edge it may not!  WRONG (or partially wrong).
-With a few minor adjustments in that thinking, and some good code ^_^ you can implement very bespoke product rate limits.  
+With a few minor adjustments in that thinking, and some good code ^_^ you can implement very bespoke product rate limits at edge before it even hits your controller.  
 For example, if you want to only allow updates to a PARTICULAR entity five times within a second, because updates generate cascading events
 that are taxing/onerous on the systems and downstream systems, you CAN capture that here.  REST patterns allow you to target that particular
 condition among many more.  Look at the below configuration in the How it works section!
