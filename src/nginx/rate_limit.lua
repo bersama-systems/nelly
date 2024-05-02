@@ -64,8 +64,21 @@ local function evaluate_condition(ngx, condition)
         return nil, "Invalid condition encountered: " .. condition.name
     end
 
-    local lhs_val = get_key_value(condition.lhs)
-    local rhs_val = get_key_value(condition.rhs)
+    local lhs_val = nil
+    local rhs_val = nil
+
+    if (type(condition.lhs) == "table") then
+       lhs_val = evaluate_condition(ngx, condition.lhs)
+    else
+        lhs_val = get_key_value(condition.lhs)
+    end
+
+    if (type(condition.rhs) == "table") then
+      rhs_val = evaluate_condition(ngx, condition.rhs)
+    else
+      rhs_val = get_key_value(condition.rhs)
+    end
+
     if condition.operator == "eq" then
         return lhs_val == rhs_val
     end
@@ -83,6 +96,12 @@ local function evaluate_condition(ngx, condition)
     end
     if condition.operator == "gte" then
         return lhs_val >= rhs_val
+    end
+    if condition.operator == "and" then
+        return lhs_val and rhs_val
+    end
+    if condition.operator == "or" then
+       return lhs_val or rhs_val
     end
     return false
 end

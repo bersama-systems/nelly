@@ -82,5 +82,43 @@
         "interval_seconds": 1
       }
     ]
+  },
+  {
+    "name": "get ",
+    "verb" : "GET",
+    "uri" : "\/api\/example/composite_condition",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": {
+                "name": "Plan Type 1",
+                "lhs": "ngx.var.http_x_account_plan",
+                "operator": "eq",
+                "rhs" : "1"
+              },
+          "operator": "or",
+            "rhs" : {
+              "name": "Plan Type 99",
+              "lhs": "ngx.var.http_x_account_plan",
+              "operator": "eq",
+              "rhs" : "99"
+            }
+        },
+        "threshold": 300,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
   }
 ]
