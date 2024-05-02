@@ -129,40 +129,138 @@ Have a look at this file: https://github.com/bersama-systems/nelly/blob/main/src
 I hope you find it interesting!!!\
 It is!  
 ```json
- {
-  "name": "get ",
-  "verb" : "GET",
-  "uri" : "\/api\/example",
-  "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
-  "limits" : [
-    {
-      "condition" : {
-        "name": "Plan Type 1",
-        "lhs": "ngx.var.http_x_account_plan",
-        "operator": "eq",
-        "rhs" : "1"
+[
+  {
+    "name": "get ",
+    "verb" : "GET",
+    "uri" : "\/api\/example",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 300,
+        "interval_seconds": 60
       },
-      "threshold": 300,
-      "interval_seconds": 60
-    },
-    {
-      "condition": {
-        "name": "Fallback threshold",
-        "lhs": "1",
-        "operator": "eq",
-        "rhs" : "1"
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "name": "get with id",
+    "verb" : "GET",
+    "uri" : "\/api\/example\/\\d+",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 300,
+        "interval_seconds": 60
       },
-      "threshold": 60,
-      "interval_seconds": 60
-    }
-  ]
-}
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "name": "put with id",
+    "verb" : "PUT",
+    "uri" : "\/api\/example\/\\d+",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 5,
+        "interval_seconds": 1
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 1,
+        "interval_seconds": 1
+      }
+    ]
+  },
+  {
+    "name": "get ",
+    "verb" : "GET",
+    "uri" : "\/api\/example/composite_condition",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": {
+            "name": "Plan Type 1",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs" : "1"
+          },
+          "operator": "or",
+          "rhs" : {
+            "name": "Plan Type 99",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs" : "99"
+          }
+        },
+        "threshold": 300,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  }
+]
+
 ```
 
 name: the name of the limit configuration\
 verb: the HTTP verb that is part of the selector \
 uri: the URI or path not including query parameters \
 limit_key: how we UNIQUELY identify the counter in Redis.  Note that it uses:  Account ID (from headers), request method, and the URI \
+condition: the "statement" that is evaluated dynamically (to a simple boolean ) in the limit to determine which limit to pick.  Conditions may contain other conditions or be a string to evaluate.
 limits: array of plan based limits.  If an account is on the "higher" plan, it will get 300 requests per minute.  Else, the default fallback condition will be used, or 60 requests per minute
 
 General principles:
