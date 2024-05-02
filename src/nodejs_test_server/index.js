@@ -22,6 +22,10 @@ app.get('/api/example', (req, res) => {
   res.status(200).json(examples)
 });
 
+app.get('/api/example/composite_condition', (req, res) => {
+  res.status(200).json(examples)
+});
+
 app.get('/api/example/:id', (req, res) => {
   res.status(200).json(examples.filter((example) => example.id == req.params.id))
 });
