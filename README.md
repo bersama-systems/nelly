@@ -260,7 +260,7 @@ name: the name of the limit configuration\
 verb: the HTTP verb that is part of the selector \
 uri: the URI or path not including query parameters \
 limit_key: how we UNIQUELY identify the counter in Redis.  Note that it uses:  Account ID (from headers), request method, and the URI \
-condition: the "statement" that is evaluated dynamically (to a simple boolean ) in the limit to determine which limit to pick.  Conditions may contain other conditions or be a string to evaluate.
+condition: the "statement" that is evaluated dynamically (to a simple boolean ) in the limit to determine which limit to pick.  Conditions may contain other conditions or be a string to evaluate. \
 limits: array of plan based limits.  If an account is on the "higher" plan, it will get 300 requests per minute.  Else, the default fallback condition will be used, or 60 requests per minute
 
 General principles:
