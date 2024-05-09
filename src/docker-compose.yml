@@ -1,7 +1,6 @@
 version: '3'
 services:
   nodejs:
-    container_name: nodejs
     build:
       context: ./nodejs_test_server
       dockerfile: Dockerfile
@@ -9,13 +8,11 @@ services:
       - "3000:3000"
   redis:
     image: redis:6.0.10
-    container_name: redis
     ports:
       - "6379:6379"
     volumes:
       - ./redis_data:/data
   nginx:
-    container_name: nginx
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -24,4 +21,3 @@ services:
     depends_on:
       - redis
       - nodejs
-

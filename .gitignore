@@ -4,3 +4,4 @@
 
 # User-specific stuff:
 .idea/*
+src/redis_data
