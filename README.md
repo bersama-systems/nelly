@@ -58,7 +58,8 @@ condition among many more.  Look at the below configuration in the How it works 
 in the root source directory execute:
 
 ```shell
-./src/test.sh
+cd src
+./test.sh
 ```
 
 The resultant should be something like:
