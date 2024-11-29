@@ -137,7 +137,35 @@ It is!
 ```json
 [
   {
-    "name": "get ",
+    "limit_class" : "plan",
+    "name": "Plan Limits",
+    "limit_key":  ["ngx.var.http_x_account_id"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 300,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold for plans",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 5,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "limit_class" : "product",
+    "name": "Limit on example controller endpoint (index)",
     "verb" : "GET",
     "uri" : "\/api\/example",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
@@ -149,7 +177,7 @@ It is!
           "operator": "eq",
           "rhs" : "1"
         },
-        "threshold": 300,
+        "threshold": 200,
         "interval_seconds": 60
       },
       {
@@ -165,7 +193,8 @@ It is!
     ]
   },
   {
-    "name": "get with id",
+    "limit_class" : "product",
+    "name": "Limit on example controller with id (Show)",
     "verb" : "GET",
     "uri" : "\/api\/example\/\\d+",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
@@ -193,7 +222,8 @@ It is!
     ]
   },
   {
-    "name": "put with id",
+    "limit_class" : "product",
+    "name": "Limit on example controller with id (Put update)",
     "verb" : "PUT",
     "uri" : "\/api\/example\/\\d+",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
@@ -221,9 +251,10 @@ It is!
     ]
   },
   {
+    "limit_class" : "product",
     "name": "get ",
     "verb" : "GET",
-    "uri" : "\/api\/example/composite_condition",
+    "uri" : "\/api\/example\/composite_condition",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
     "limits" : [
       {
@@ -243,7 +274,45 @@ It is!
             "rhs" : "99"
           }
         },
-        "threshold": 300,
+        "threshold": 200,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "limit_class" : "product",
+    "name": "Wildcard Verb",
+    "uri" : "\/api\/wildcard_verb",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": {
+            "name": "Plan Type 1",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs" : "1"
+          },
+          "operator": "or",
+          "rhs" : {
+            "name": "Plan Type 99",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs" : "99"
+          }
+        },
+        "threshold": 200,
         "interval_seconds": 60
       },
       {
@@ -261,6 +330,7 @@ It is!
 ]
 ```
 
+* limit_class: the class of the limit.  Should assume one of two values: "product", "plan"
 * name: the name of the limit configuration
 * verb: the HTTP verb that is part of the selector
 * uri: the URI or path not including query parameters
@@ -270,8 +340,9 @@ It is!
 
 General principles:
 
-1. The engine will try to find the best node match based on the incoming request URL and verb
-2. The engine will then find the best plan fit based on the professed plan
+1. The engine will try find the best plan match based on the incoming account information.  If found, the engine will apply the plan limit first.  If the plan limit passes, continue.
+2. The engine will try to find the best product node match based on the incoming request URL and verb as indices (we don't want to iterate over 1000s of nodes for each request, so indexing on http verb and path is a really good idea)
+2. The engine will then find the best plan fit based on the professed plan in the header
 3. The engine will then employ the amalgamation key (seeded from pretend upper layers of authentication etc) and construct a redis key that uniquely identifies this customer on this node.
 4. The engine will use redis to transact with the rate limit ledger
 5. If limit thresholds have been exceeded it limits, otherwise it lets traffic through.
