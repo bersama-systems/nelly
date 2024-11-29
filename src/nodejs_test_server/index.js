@@ -45,6 +45,21 @@ app.put('/api/example/:id', (req, res) => {
   res.status(400).json("Invalid update requested")
 });
 
+app.get('/api/uncovered_product_limit', (req, res) => {
+  res.status(200).json("ok braddah")
+});
+app.get('/foo', (req, res) => {
+  res.status(200).json("ok braddah")
+});
+app.post('/api/wildcard_verb', (req, res) => {
+  res.status(200).json("ok braddah")
+});
+app.put('/api/wildcard_verb', (req, res) => {
+  res.status(200).json("ok braddah")
+});
+app.get('/api/wildcard_verb', (req, res) => {
+  res.status(200).json("ok braddah")
+});
 app.post('/api/example/object', (req, res) => {
   res.status = 200;
   res.send('Hello from the POST example API endpoint!');

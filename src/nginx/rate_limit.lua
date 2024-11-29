@@ -34,16 +34,22 @@ local function get_key_value(limit_key)
     return limit_key
 end
 
-local function find_best_match(ngx, nodes, verb, uri)
+local function find_best_match(limit_class, ngx, nodes, request_verb, request_uri)
     local best_match = nil
     local best_score = -1
 
     for _, node in ipairs(nodes) do
         local pattern = node.uri
+
+        if pattern == nil then
+            pattern = "\\/.*"
+        end
+
         local score = -1
-        if node.verb == verb then
+        if (node.verb == nil) or (node.verb == request_verb) then
             -- Calculate score based on URI pattern match
-            local uri_match = ngx.re.match(uri, "^" .. pattern .. "$", "jo")
+            local uri_match = ngx.re.match(request_uri, "^" .. pattern .. "$", "jo")
+
             if uri_match then
                 score = score + #uri_match[0]
             end
@@ -146,7 +152,7 @@ local function amalgamate_key(ngx, node)
         return nil, "invalid limit key"
     end
 
-    local limit_key = ""
+    local limit_key = "nelly:" -- adds our namespace
     for _, key_component in ipairs(node.limit_key) do
         limit_key = limit_key .. get_key_value(key_component)
     end
@@ -182,13 +188,13 @@ local function apply_rate_limit(ngx, redis_key, interval, threshold)
 
 end
 
-local function rate_limit(ngx, nodes, verb, uri) -- returns amount to wait, error string
+local function rate_limit(limit_class, ngx, nodes, request_verb, request_uri) -- returns amount to wait, error string
 -- 1. Find the appropriate node we want to rate rate_limit
 -- 2. Execute the conditions and easy out on first match.
 -- 3. Apply the rate limit and return how long one would wait, along with error encountered.
-    local best_node = find_best_match(ngx, nodes, verb, uri)
+    local best_node = find_best_match(limit_class, ngx, nodes, request_verb, request_uri)
+
     if not best_node then
-        ngx.log(ngx.ERR, "***** DEBUG: find_best_match NO found node")
         return nil, nil
     end
 
@@ -212,7 +218,7 @@ local function rate_limit(ngx, nodes, verb, uri) -- returns amount to wait, erro
         return nil, err
    end
 
-   return limit_applied, err
+   return limit_applied, err, best_node
 end
 
 -- Return the function so it can be used elsewhere
