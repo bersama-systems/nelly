@@ -310,7 +310,7 @@ successful_requests=0
 account_id=$RANDOM
 for i in {1..365}
 do
-  response=$(curl -X PUT --header "x-account-plan: 99" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example/wildcard_verb)
+  response=$(curl -X PUT --header "x-account-plan: 99" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/wildcard_verb)
   if [ "$response" -eq 429 ]; then
     break
   fi
