@@ -1,13 +1,13 @@
 [
   {
     "limit_class" : "plan",
-    "name": "Suppport Product API V2 Plan Limits",
+    "name": "A Particular Product API Plan Limits",
     "uri" : "\/api\/.*",
     "limit_key":  ["ngx.var.http_x_account_plan" ,"ngx.var.http_x_account_id"],
     "limits" : [
       {
         "condition" : {
-          "name": "Blanket Plan Type 1",
+          "name": "Particular Product Plan Type 1",
           "lhs": "ngx.var.http_x_account_plan",
           "operator": "eq",
           "rhs" : "1"
@@ -17,7 +17,7 @@
       },
       {
         "condition": {
-          "name": "Fallback threshold for plans",
+          "name": "Particular Product Plan Type Fallback",
           "lhs": "1",
           "operator": "eq",
           "rhs" : "1"
