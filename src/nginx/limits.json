@@ -3,7 +3,7 @@
     "limit_class" : "plan",
     "name": "Suppport Product API V2 Plan Limits",
     "uri" : "\/api\/.*",
-    "limit_key":  ["ngx.var.http_x_account_id"],
+    "limit_key":  ["ngx.var.http_x_account_plan" ,"ngx.var.http_x_account_id"],
     "limits" : [
       {
         "condition" : {
@@ -30,7 +30,7 @@
   {
     "limit_class" : "plan",
     "name": "Blanket Plan Limits",
-    "limit_key":  ["ngx.var.http_x_account_id"],
+    "limit_key":  ["ngx.var.http_x_account_plan","ngx.var.http_x_account_id"],
     "limits" : [
       {
         "condition" : {
