@@ -23,6 +23,38 @@ local function close_redis(red)
     end
 end
 
+local function get_config_from_redis()
+    local red = connect_to_redis()
+    if not red then
+        return nil, "could not connect to redis"
+    end
+
+    local version_value, err = red.get("nelly_configuration_version")
+    if  err or not version_value then
+        close_redis(red)
+        return nil, "could not get configuration version"
+    end
+
+    if ngx.shared.nelly_configuration_version == version_value and not ngx.shared.nelly_configuration then
+        close_redis(red)
+        return nil, nil
+    end
+
+    local configuration_value, err = red.get("nelly_configuration")
+
+    if err or not configuration_value then
+        close_redis(red)
+        return nil, "could not get configuration value"
+    end
+
+    close_redis(red)
+
+    ngx.shared.nelly_configuration_version = version_value
+    ngx.shared.nelly_configuration = configuration_value
+
+    return configuration_value, err
+end
+
 local function get_key_value(limit_key)
     local extracted_name = string.match(limit_key, "ngx.var.(.+)")
     if extracted_name then

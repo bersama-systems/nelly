@@ -7,11 +7,20 @@ services:
     ports:
       - "3000:3000"
   redis:
-    image: redis:6.0.10
+    image: redis:latest
     ports:
       - "6379:6379"
     volumes:
       - ./redis_data:/data
+  webdis:
+    image: public.ecr.aws/nicolas/webdis:latest
+    container_name: webdis
+    ports:
+      - "7379:7379"
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
   nginx:
     build:
       context: ./nginx
@@ -19,5 +28,5 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - redis
+      - webdis
       - nodejs

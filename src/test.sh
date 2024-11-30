@@ -3,7 +3,7 @@
 # Start docker via docker-compose.
 
 if [ $1 = "clean" ]; then
-  ./clean_nginx.sh
+  ./clean.sh
 fi
 
 ./start.sh
@@ -25,6 +25,11 @@ done
 if [ "$response" -ne 200 ]; then
   echo "could not warm up the system"
   exit -127
+fi
+
+if [ $2 = "short_circuit" ]; then
+  echo "System initialized, short circuit stopping tests"
+  exit 0
 fi
 
 echo "NodeJS app and openresty responding and warmed up..... starting tests"
