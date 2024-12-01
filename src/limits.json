@@ -1,0 +1,221 @@
+[
+  {
+    "limit_class" : "plan",
+    "name": "A Particular Product API Plan Limits",
+    "uri" : "\/api\/.*",
+    "limit_key":  ["ngx.var.http_x_account_plan" ,"ngx.var.http_x_account_id"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Particular Product Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 300,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Particular Product Plan Type Fallback",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 5,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "limit_class" : "plan",
+    "name": "Blanket Plan Limits",
+    "limit_key":  ["ngx.var.http_x_account_plan","ngx.var.http_x_account_id"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Blanket Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold":100,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold for plans",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 4,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "limit_class" : "product",
+    "name": "Limit on example controller endpoint (index)",
+    "verb" : "GET",
+    "uri" : "\/api\/example",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 200,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "limit_class" : "product",
+    "name": "Limit on example controller with id (Show)",
+    "verb" : "GET",
+    "uri" : "\/api\/example\/\\d+",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 300,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "limit_class" : "product",
+    "name": "Limit on example controller with id (Put update)",
+    "verb" : "PUT",
+    "uri" : "\/api\/example\/\\d+",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 5,
+        "interval_seconds": 1
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 1,
+        "interval_seconds": 1
+      }
+    ]
+  },
+  {
+    "limit_class" : "product",
+    "name": "get ",
+    "verb" : "GET",
+    "uri" : "\/api\/example\/composite_condition",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": {
+                "name": "Plan Type 1",
+                "lhs": "ngx.var.http_x_account_plan",
+                "operator": "eq",
+                "rhs" : "1"
+              },
+          "operator": "or",
+          "rhs" : {
+            "name": "Plan Type 99",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs" : "99"
+          }
+        },
+        "threshold": 200,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  },
+  {
+    "limit_class" : "product",
+    "name": "Wildcard Verb",
+    "uri" : "\/api\/wildcard_verb",
+    "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.uri"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Plan Type 1",
+          "lhs": {
+            "name": "Plan Type 1",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs" : "1"
+          },
+          "operator": "or",
+          "rhs" : {
+            "name": "Plan Type 99",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs" : "99"
+          }
+        },
+        "threshold": 200,
+        "interval_seconds": 60
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs" : "1"
+        },
+        "threshold": 60,
+        "interval_seconds": 60
+      }
+    ]
+  }
+]
