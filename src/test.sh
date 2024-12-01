@@ -3,7 +3,7 @@
 # Start docker via docker-compose.
 
 if [ $1 = "clean" ]; then
-  ./clean_nginx.sh
+  ./clean.sh
 fi
 
 ./start.sh
