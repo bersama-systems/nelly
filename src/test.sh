@@ -27,11 +27,14 @@ if [ "$response" -ne 200 ]; then
   exit -127
 fi
 
-if [ $1 = "short_circuit" ] ||  [ $2 = "short_circuit" ] ; then
+if [ $1 = "short_circuit" ]; then
    echo "short circuit exit"
    exit 0
 fi
-
+if [ $2 = "short_circuit" ]; then
+   echo "short circuit exit"
+   exit 0
+fi
 echo "NodeJS app and openresty responding and warmed up..... starting tests"
 
 echo "Testing Plan limits on uncovered product limits"
@@ -387,5 +390,33 @@ if [ "$successful_requests" -gt 5 ];
     exit -127
 fi
 echo "Got off $successful_requests requests for upper plan limit GET for composite_condition"
+
+echo "Testing conditional rate limits"
+
+cat conditional_limits.json | redis-cli -x SET nelly_conditional_limits
+
+pid=`docker exec src-nginx-1 cat /usr/local/openresty/nginx/logs/nginx.pid`
+docker exec src-nginx-1 /bin/kill -HUP $pid
+successful_requests=0
+account_id="69420"
+for i in {1..365}
+do
+  response=$(curl --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example)
+  if [ "$response" -eq 429 ]; then
+    break
+  fi
+  successful_requests=$((successful_requests+1))
+  if [ "$i" -gt 2 ];
+  then
+    echo "conditional Account Rate limiting failed!!! $successful_requests"
+    echo "Rate limiting failed!!!"
+    exit -127
+  fi
+done
+if [ "$successful_requests" -gt 2 ];
+  then
+    echo "conditional Account Rate limiting failed!!! $successful_requests"
+    exit -127
+fi
 
 echo "*****Suite success!!!*****"
