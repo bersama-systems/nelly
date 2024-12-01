@@ -130,7 +130,7 @@ also aptly set up as well.
 
 ## How it works
 
-Have a look at [the limits json](./src/nginx/limits.json) \
+Have a look at [the limits json](./src/limits.json) \
 I hope you find it interesting!!!\
 It is!
 
