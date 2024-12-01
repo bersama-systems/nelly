@@ -27,6 +27,11 @@ if [ "$response" -ne 200 ]; then
   exit -127
 fi
 
+if [ $1 = "short_circuit" ] ||  [ $2 = "short_circuit" ] ; then
+   echo "short circuit exit"
+   exit 0
+fi
+
 echo "NodeJS app and openresty responding and warmed up..... starting tests"
 
 echo "Testing Plan limits on uncovered product limits"

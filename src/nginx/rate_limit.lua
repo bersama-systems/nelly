@@ -188,6 +188,55 @@ local function apply_rate_limit(ngx, redis_key, interval, threshold)
 
 end
 
+local function get_and_initialize_configuration()
+   if ngx.shared.nelly_configuration then
+    return nil, nil
+   end
+-- Connect to Redis
+   local red = connect_to_redis()
+   if not red then
+        ngx.log(ngx.ERR, "redis connect failed " .. "\n")
+        return nil, "could not connect to redis"
+   end
+
+    local res, err = red:get("nelly_configuration")
+    close_redis(red)
+    if not res then
+        ngx.log(ngx.ERR, "redis get failed " .. "\n", err)
+        return nil, "could not get key my_key"
+    end
+
+    local cjson = require "cjson.safe"
+
+    -- Read the contents of the JSON file
+    local json_str = res
+
+    -- Parse the JSON data
+    local json_data, err = cjson.decode(json_str)
+    if not json_data then
+        ngx.log(ngx.ERR, "Failed to decode JSON file:", err)
+        return nil, "could not parse JSON"
+    end
+
+    -- Store the parsed JSON data in a shared variable
+    ngx.shared.my_config = json_data
+    local plan_nodes = {}
+    local product_nodes = {}
+
+    for _, node in ipairs(json_data) do
+        if node.limit_class == "plan" then
+            table.insert(plan_nodes, node)
+        elseif node.limit_class == "product" then
+            table.insert(product_nodes, node)
+        else
+            ngx.log(ngx.ERR, "ERROR: UNKNOWN NODE CLASS ENCOUNTERED: ")
+        end
+    end
+    ngx.shared.plan_nodes = plan_nodes
+    ngx.shared.product_nodes = product_nodes
+end
+
+
 local function rate_limit(limit_class, ngx, nodes, request_verb, request_uri) -- returns amount to wait, error string
 -- 1. Find the appropriate node we want to rate rate_limit
 -- 2. Execute the conditions and easy out on first match.
@@ -223,5 +272,6 @@ end
 
 -- Return the function so it can be used elsewhere
 return {
-    rate_limit = rate_limit
+    rate_limit = rate_limit,
+    get_and_initialize_configuration = get_and_initialize_configuration
 }
