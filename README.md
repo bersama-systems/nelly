@@ -345,7 +345,6 @@ General principles:
 1. The engine will try to find a conditional rate limit that matches first. If a CRL is found, and violated, it's lights out at the onset.
 2. The engine will try find the best plan match based on the incoming account information.  If found, the engine will apply the plan limit first.  If the plan limit passes, continue.
 2. The engine will try to find the best product node match based on the incoming request URL and verb as indices (we don't want to iterate over 1000s of nodes for each request, so indexing on http verb and path is a really good idea)
-2. The engine will then find the best plan fit based on the professed plan in the header
-3. The engine will then employ the amalgamation key (seeded from pretend upper layers of authentication etc) and construct a redis key that uniquely identifies this customer on this node.
+3. The engine will employ the amalgamation key (seeded from pretend upper layers of authentication etc) and construct a redis key that uniquely identifies this customer on this node.
 4. The engine will use redis to transact with the rate limit ledger
 5. If limit thresholds have been exceeded it limits, otherwise it lets traffic through.
