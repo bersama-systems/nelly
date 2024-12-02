@@ -330,7 +330,9 @@ It is!
 ]
 ```
 
-* limit_class: the class of the limit.  Should assume one of two values: "product", "plan"
+* limit_class: the class of the limit.  Should assume one of three values: "product", "plan", "conditional"
+* "product" and "plan" limits are in the same redis key "nelly_configuration"
+* "conditional" limits are in a different redis node (since they are more volatile) "nelly_conditional_limits"
 * name: the name of the limit configuration
 * verb: the HTTP verb that is part of the selector
 * uri: the URI or path not including query parameters
@@ -340,7 +342,8 @@ It is!
 
 General principles:
 
-1. The engine will try find the best plan match based on the incoming account information.  If found, the engine will apply the plan limit first.  If the plan limit passes, continue.
+1. The engine will try to find a conditional rate limit that matches first. If a CRL is found, and violated, it's lights out at the onset.
+2. The engine will try find the best plan match based on the incoming account information.  If found, the engine will apply the plan limit first.  If the plan limit passes, continue.
 2. The engine will try to find the best product node match based on the incoming request URL and verb as indices (we don't want to iterate over 1000s of nodes for each request, so indexing on http verb and path is a really good idea)
 2. The engine will then find the best plan fit based on the professed plan in the header
 3. The engine will then employ the amalgamation key (seeded from pretend upper layers of authentication etc) and construct a redis key that uniquely identifies this customer on this node.
