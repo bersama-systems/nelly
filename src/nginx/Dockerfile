@@ -6,9 +6,9 @@ FROM openresty/openresty:latest
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY rate_limit.lua /usr/local/openresty/lualib/rate_limit.lua
 COPY nelly_configuration.lua /usr/local/openresty/lualib/nelly_configuration.lua
-COPY limits.json /usr/local/openresty/nginx/conf/limits.json
 RUN mkdir -p /var/log/nginx
-
+RUN apt-get update
+RUN apt-get install -y procps
 # Expose port 80
 EXPOSE 80
 

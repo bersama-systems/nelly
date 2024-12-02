@@ -1,0 +1,20 @@
+[
+  {
+    "limit_class" : "conditional",
+    "name": "A naughty customer",
+    "uri" : "\/api\/.*",
+    "limit_key":  ["ngx.var.http_x_account_id"],
+    "limits" : [
+      {
+        "condition" : {
+          "name": "Particular customer with account id 69420",
+          "lhs": "ngx.var.http_x_account_id",
+          "operator": "eq",
+          "rhs" : "69420"
+        },
+        "threshold": 1,
+        "interval_seconds": 900
+      }
+    ]
+  }
+]

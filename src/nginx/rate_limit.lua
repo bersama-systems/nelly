@@ -38,6 +38,11 @@ local function find_best_match(limit_class, ngx, nodes, request_verb, request_ur
     local best_match = nil
     local best_score = -1
 
+    if not nodes then
+        ngx.log(ngx.ERR, "find_best_match: no nodes for class:", limit_class)
+        return best_match
+    end
+
     for _, node in ipairs(nodes) do
         local pattern = node.uri
 
@@ -137,7 +142,8 @@ local function to_hex_string(input_string)
     for i = 1, #input_string do
         hex_string = hex_string .. string.format("%02x", string.byte(input_string, i))
     end
-    return hex_string
+    return input_string
+    -- return hex_string
 end
 
 local function amalgamate_key(ngx, node)
@@ -152,7 +158,7 @@ local function amalgamate_key(ngx, node)
         return nil, "invalid limit key"
     end
 
-    local limit_key = "nelly:" -- adds our namespace
+    local limit_key = "nelly:" .. node.limit_class .. ":" -- adds our namespace
     for _, key_component in ipairs(node.limit_key) do
         limit_key = limit_key .. get_key_value(key_component)
     end
@@ -188,18 +194,21 @@ local function apply_rate_limit(ngx, redis_key, interval, threshold)
 
 end
 
-local function get_and_initialize_configuration()
-   if ngx.shared.nelly_configuration then
-    return nil, nil
-   end
+local function get_and_initialize_configuration(limit_class)
+
+   ngx.log(ngx.ERR, "NGINX starting initialization: get_and_initialize_configuration for class:" .. limit_class .. "\n")
 -- Connect to Redis
    local red = connect_to_redis()
    if not red then
         ngx.log(ngx.ERR, "redis connect failed " .. "\n")
         return nil, "could not connect to redis"
    end
-
-    local res, err = red:get("nelly_configuration")
+   local res, err
+    if limit_class == "plan" or limit_class == "product" then
+      res, err = red:get("nelly_configuration")
+    else
+      res, err = red:get("nelly_conditional_limits")
+    end
     close_redis(red)
     if not res then
         ngx.log(ngx.ERR, "redis get failed " .. "\n", err)
@@ -209,7 +218,7 @@ local function get_and_initialize_configuration()
     local cjson = require "cjson.safe"
 
     -- Read the contents of the JSON file
-    local json_str = res
+    local json_str = tostring(res)
 
     -- Parse the JSON data
     local json_data, err = cjson.decode(json_str)
@@ -222,18 +231,28 @@ local function get_and_initialize_configuration()
     ngx.shared.my_config = json_data
     local plan_nodes = {}
     local product_nodes = {}
+    local conditional_nodes = {}
 
     for _, node in ipairs(json_data) do
         if node.limit_class == "plan" then
             table.insert(plan_nodes, node)
         elseif node.limit_class == "product" then
             table.insert(product_nodes, node)
+        elseif node.limit_class == "conditional" then
+            table.insert(conditional_nodes, node)
         else
             ngx.log(ngx.ERR, "ERROR: UNKNOWN NODE CLASS ENCOUNTERED: ")
         end
     end
-    ngx.shared.plan_nodes = plan_nodes
-    ngx.shared.product_nodes = product_nodes
+    if limit_class == "product" or limit_class == "plan" then
+        ngx.shared.plan_nodes = plan_nodes
+        ngx.shared.product_nodes = product_nodes
+        ngx.log(ngx.ERR, "Nelly loaded plan and product nodes\n")
+    elseif limit_class == "conditional" then
+        ngx.shared.conditional_nodes = conditional_nodes
+        ngx.log(ngx.ERR, "Nelly loaded conditional nodes\n")
+    end
+
 end
 
 
