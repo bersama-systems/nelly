@@ -142,8 +142,7 @@ local function to_hex_string(input_string)
     for i = 1, #input_string do
         hex_string = hex_string .. string.format("%02x", string.byte(input_string, i))
     end
-    return input_string
-    -- return hex_string
+    return hex_string
 end
 
 local function amalgamate_key(ngx, node)
