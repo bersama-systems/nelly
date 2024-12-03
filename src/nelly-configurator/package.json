@@ -1,0 +1,14 @@
+{
+  "name": "sampleApp",
+  "version": "1.0.0",
+  "description": "A basic Node.js service exposing an HTTP API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Joshua Teitelbaum ",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+  }
+}
