@@ -45,8 +45,8 @@ condition among many more.  Look at the below configuration in the How it works 
 
 ## DEMOS
 [Conditional Rate Limits](https://youtu.be/VCC3krsdJyI)  
-[Plan Rate Limits](https://youtu.be/wbHslRlQCVE)  
-[Product Rate Limits](https://youtu.be/Li0eCmjm-5I)  
+[Product Rate Limits](https://youtu.be/wbHslRlQCVE)  
+[Plan Rate Limits](https://youtu.be/Li0eCmjm-5I)  
 
 ## How to run Nelly to test it out
 
