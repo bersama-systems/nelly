@@ -170,26 +170,26 @@ local function apply_rate_limit(ngx, redis_key, interval, threshold)
  -- Connect to Redis
     local red = connect_to_redis()
     if not red then
-        return nil, "could not connect to redis"
+        return nil, nil, "could not connect to redis"
     end
     -- Increment the key
     local new_value, err = red:incr(redis_key)
     if not new_value then
         ngx.log(ngx.ERR, "apply_rate_limit: Failed to increment Redis key: ", err)
-        return nil, err
+        return nil, nil, err
     end
 
     if tonumber(new_value) == 1 then
         local ok, err = red:expire(redis_key, interval)
         if not ok then
             ngx.log(ngx.ERR, "apply_rate_limit: Failed to set expiration for Redis key: ", err)
-            return nil, err
+            return nil, nil, err
         end
     end
 
     close_redis(red)
 
-    return new_value / threshold, nil
+    return new_value, threshold, nil
 
 end
 
@@ -268,24 +268,24 @@ local function rate_limit(limit_class, ngx, nodes, request_verb, request_uri) --
     local best_limit, err = find_best_limit(ngx, best_node)
 
     if err then
-        return nil, err
+        return nil, nil, err
     end
 
     local rate_limit_key, err = amalgamate_key(ngx, best_node)
 
     if err then
-        return nil, err
+        return nil, nil, err
     end
 
    local redis_key = to_hex_string(rate_limit_key)
 
-   local limit_applied, err = apply_rate_limit(ngx, redis_key, best_limit.interval_seconds, best_limit.threshold)
+   local new_value, threshold, err = apply_rate_limit(ngx, redis_key, best_limit.interval_seconds, best_limit.threshold)
 
    if err then
-        return nil, err
+        return nil, nil, err
    end
 
-   return limit_applied, err, best_node
+   return new_value, threshold, err, best_node, best_limit
 end
 
 -- Return the function so it can be used elsewhere

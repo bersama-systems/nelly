@@ -2,6 +2,7 @@
   {
     "limit_class" : "conditional",
     "name": "A naughty customer",
+    "short_name": "Contact_Support_regarding_this_limit",
     "uri" : "\/api\/.*",
     "limit_key":  ["ngx.var.http_x_account_id"],
     "limits" : [
