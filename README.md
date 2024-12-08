@@ -144,6 +144,7 @@ It is!
   {
     "limit_class" : "plan",
     "name": "Plan Limits",
+    "short_name": "plan",
     "limit_key":  ["ngx.var.http_x_account_id"],
     "limits" : [
       {
@@ -171,6 +172,7 @@ It is!
   {
     "limit_class" : "product",
     "name": "Limit on example controller endpoint (index)",
+    "short_name": "example_controller_reads",
     "verb" : "GET",
     "uri" : "\/api\/example",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
@@ -200,6 +202,7 @@ It is!
   {
     "limit_class" : "product",
     "name": "Limit on example controller with id (Show)",
+    "short_name": "example_controller_shows",
     "verb" : "GET",
     "uri" : "\/api\/example\/\\d+",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
@@ -229,6 +232,7 @@ It is!
   {
     "limit_class" : "product",
     "name": "Limit on example controller with id (Put update)",
+    "short_name": "example_controller_writes",
     "verb" : "PUT",
     "uri" : "\/api\/example\/\\d+",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
@@ -258,6 +262,7 @@ It is!
   {
     "limit_class" : "product",
     "name": "get ",
+    "short_name": "composite_condition_reads",
     "verb" : "GET",
     "uri" : "\/api\/example\/composite_condition",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.request_method", "ngx.var.uri"],
@@ -297,6 +302,7 @@ It is!
   {
     "limit_class" : "product",
     "name": "Wildcard Verb",
+    "short_name": "wildcard_verb_controller",
     "uri" : "\/api\/wildcard_verb",
     "limit_key":  ["ngx.var.http_x_account_id", "ngx.var.uri"],
     "limits" : [
