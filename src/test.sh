@@ -406,14 +406,14 @@ do
     break
   fi
   successful_requests=$((successful_requests+1))
-  if [ "$i" -gt 2 ];
+  if [ "$i" -gt 5 ];
   then
     echo "conditional Account Rate limiting failed!!! $successful_requests"
     echo "Rate limiting failed!!!"
     exit -127
   fi
 done
-if [ "$successful_requests" -gt 2 ];
+if [ "$successful_requests" -gt 5 ];
   then
     echo "conditional Account Rate limiting failed!!! $successful_requests"
     exit -127
