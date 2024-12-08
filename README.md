@@ -345,6 +345,7 @@ It is!
 * "product" and "plan" limits are in the same redis key "nelly_configuration"
 * "conditional" limits are in a different redis node (since they are more volatile) "nelly_conditional_limits"
 * name: the name of the limit configuration
+* short_name: the short name that will go into the rate limit headers for explanation of what controller/action was hit
 * verb: the HTTP verb that is part of the selector
 * uri: the URI or path not including query parameters
 * limit_key: how we UNIQUELY identify the counter in Redis. Note that it uses: Account ID (from headers), request method, and the URI
