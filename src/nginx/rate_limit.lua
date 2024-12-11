@@ -17,6 +17,7 @@ local function close_redis(red)
     if not red then
         return
     end
+    -- https://github.com/openresty/lua-resty-redis#check-list-for-issues Need to tune here
     local ok, err = red:set_keepalive(10000, 100)
     if not ok then
         ngx.log(ngx.ERR, "Failed to set Redis keepalive: ", err)
