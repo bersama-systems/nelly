@@ -1,0 +1,37 @@
+[
+  {
+    "limit_class" : "allowlist",
+    "verb" : "GET",
+    "name": "uncovered_product_limit",
+    "uri" : "\/api\/uncovered_product_limit"
+  },
+  {
+    "limit_class" : "allowlist",
+    "verb" : "GET",
+    "name": "foo",
+    "uri" : "\/foo"
+  },
+  {
+    "limit_class" : "allowlist",
+    "verb" : "GET",
+    "name": "example",
+    "uri" : "\/api\/example"
+  },
+  {
+    "limit_class" : "allowlist",
+    "verb" : ["PUT", "GET"],
+    "name": "get or put example",
+    "uri" : "\/api\/example\/\\d+"
+  },
+  {
+    "limit_class" : "allowlist",
+    "verb" : "GET",
+    "name": "example composite",
+    "uri" : "\/api\/example\/composite_condition"
+  },
+  {
+    "limit_class" : "allowlist",
+    "name": "wildcard verb",
+    "uri" : "\/api\/wildcard_verb"
+  }
+]

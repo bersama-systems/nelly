@@ -17,6 +17,7 @@ services:
       - redis
     volumes:
       - ./limits.json:/limits.json
+      - ./allowlist.json:/allowlist.json
       - ./redis-values-init.sh:/redis-values-init.sh
     entrypoint: [ "/bin/sh", "-c" ]
     command: |

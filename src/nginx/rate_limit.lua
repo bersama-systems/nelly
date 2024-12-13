@@ -1,6 +1,34 @@
 -- Load the Lua Redis library
 local redis = require "resty.redis"
 
+function is_array(table)
+  if type(table) ~= 'table' then
+    return false
+  end
+
+  -- objects always return empty size
+  if #table > 0 then
+    return true
+  end
+
+  -- only object can have empty length with elements inside
+  for k, v in pairs(table) do
+    return false
+  end
+
+  -- if no elements it can be array and not at same time
+  return true
+end
+
+local function has_value (tab, val)
+    for index, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end
 -- Function to connect to Redis
 local function connect_to_redis()
     local red = redis:new()
@@ -52,7 +80,7 @@ local function find_best_match(limit_class, ngx, nodes, request_verb, request_ur
         end
 
         local score = -1
-        if (node.verb == nil) or (node.verb == request_verb) then
+        if (node.verb == nil) or (node.verb == request_verb) or (is_array(node.verb) and has_value(node.verb, request_verb) ) then
             -- Calculate score based on URI pattern match
             local uri_match = ngx.re.match(request_uri, "^" .. pattern .. "$", "jo")
 
@@ -218,8 +246,10 @@ local function get_and_initialize_configuration(limit_class)
    local res, err
     if limit_class == "plan" or limit_class == "product" then
       res, err = red:get("nelly_configuration")
-    else
+    elseif limit_class == "conditional" then
       res, err = red:get("nelly_conditional_limits")
+    elseif limit_class == "allowlist" then
+        res, err = red:get("nelly_allowlist")
     end
     close_redis(red)
     if not res then
@@ -244,6 +274,7 @@ local function get_and_initialize_configuration(limit_class)
     local plan_nodes = {}
     local product_nodes = {}
     local conditional_nodes = {}
+    local allowlist_nodes = {}
 
     for _, node in ipairs(json_data) do
         if node.limit_class == "plan" then
@@ -252,7 +283,9 @@ local function get_and_initialize_configuration(limit_class)
             table.insert(product_nodes, node)
         elseif node.limit_class == "conditional" then
             table.insert(conditional_nodes, node)
-        else
+         elseif node.limit_class == "allowlist" then
+            table.insert(allowlist_nodes, node)
+         else
             ngx.log(ngx.ERR, "ERROR: UNKNOWN NODE CLASS ENCOUNTERED: ")
         end
     end
@@ -263,10 +296,30 @@ local function get_and_initialize_configuration(limit_class)
     elseif limit_class == "conditional" then
         ngx.shared.conditional_nodes = conditional_nodes
         ngx.log(ngx.ERR, "Nelly loaded conditional nodes\n")
+    elseif limit_class == "allowlist" then
+         ngx.shared.allowlist_nodes = allowlist_nodes
+         ngx.log(ngx.ERR, "Nelly loaded conditional nodes\n")
     end
 
 end
 
+local function allowlist(ngx, nodes, request_verb, request_uri)
+-- 1. Find the appropriate node we want to rate rate_limit
+-- 2. Execute the conditions and easy out on first match.
+-- 3. Apply the rate limit and return how long one would wait, along with error encountered.
+
+    if not nodes then
+        return true, nil
+    end
+
+    local best_node = find_best_match("allowlist", ngx, nodes, request_verb, request_uri)
+
+    if not best_node then
+        return false, nil
+    end
+
+    return true, nil
+end
 
 local function rate_limit(limit_class, ngx, nodes, request_verb, request_uri) -- returns amount to wait, error string
 -- 1. Find the appropriate node we want to rate rate_limit
@@ -304,5 +357,6 @@ end
 -- Return the function so it can be used elsewhere
 return {
     rate_limit = rate_limit,
+    allowlist = allowlist,
     get_and_initialize_configuration = get_and_initialize_configuration
 }

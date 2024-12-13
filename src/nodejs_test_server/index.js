@@ -48,6 +48,14 @@ app.put('/api/example/:id', (req, res) => {
 app.get('/api/uncovered_product_limit', (req, res) => {
   res.status(200).json("ok braddah")
 });
+
+/*
+This should trip the allowlist system huehuehuehue
+ */
+app.get('/api/bonkers_uncovered_product_limit', (req, res) => {
+  res.status(200).json("ok braddah allowlist")
+});
+
 app.get('/foo', (req, res) => {
   res.status(200).json("ok braddah")
 });
