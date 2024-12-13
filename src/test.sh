@@ -37,6 +37,14 @@ if [ $2 = "short_circuit" ]; then
 fi
 echo "NodeJS app and openresty responding and warmed up..... starting tests"
 
+echo "Testing allowlist, let us begin with something that should FAIL with 404"
+successful_requests=0
+account_id=$RANDOM
+response=$(curl --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/bonkers_uncovered_product_limit)
+if [ "$response" -ne 404 ]; then
+    echo "Allowlist failed!!! $response"
+    exit -1
+fi
 echo "Testing Plan limits on uncovered product limits"
 echo "Testing support lower plan limit GETS"
 successful_requests=0
@@ -325,7 +333,7 @@ do
   successful_requests=$((successful_requests+1))
   if [ "$i" -gt 200 ];
   then
-    echo "Rate limiting failed!!!"
+    echo "Rate limiting failed!!! $response"
     exit -127
   fi
 done
