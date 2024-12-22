@@ -75,48 +75,15 @@ joshuateitelbaum@Joshuas src % ./test.sh
  ✔ redis 6 layers [⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                                                                                                                        3.5s
    ✔ 83c5cfdaa538 Pull complete                                                                                                                                                                          0.8s
    ✔ af69b9847230 Pull complete                                                                                                                                                                          0.6s
-   ✔ 47328343a4f2 Pull complete                                                                                                                                                                          0.4s
-   ✔ a8bdd61c4004 Pull complete                                                                                                                                                                          0.9s
-   ✔ 6cd44fea95ad Pull complete                                                                                                                                                                          1.0s
-   ✔ 797e3a88bf94 Pull complete                                                                                                                                                                          1.1s
-[+] Building 1.9s (20/20) FINISHED                                                                                                                                                       docker:desktop-linux
- => [nodejs internal] load build definition from Dockerfile.nodejs                                                                                                                                       0.0s
- => => transferring dockerfile: 343B                                                                                                                                                                     0.0s
- => [nodejs internal] load .dockerignore                                                                                                                                                                 0.0s
- => => transferring context: 2B                                                                                                                                                                          0.0s
- => [nodejs internal] load metadata for docker.io/library/node:lts                                                                                                                                       0.7s
- => [nodejs 1/5] FROM docker.io/library/node:lts@sha256:844b41cf784f66d7920fd673f7af54ca7b81e289985edc6cd864e7d05e0d133c                                                                                 0.0s
- => => resolve docker.io/library/node:lts@sha256:844b41cf784f66d7920fd673f7af54ca7b81e289985edc6cd864e7d05e0d133c                                                                                        0.0s
- => [nodejs internal] load build context                                                                                                                                                                 0.0s
- => => transferring context: 26.83kB                                                                                                                                                                     0.0s
- => CACHED [nodejs 2/5] WORKDIR /usr/src/app                                                                                                                                                             0.0s
- => CACHED [nodejs 3/5] COPY package*.json ./                                                                                                                                                            0.0s
- => CACHED [nodejs 4/5] RUN npm install                                                                                                                                                                  0.0s
- => CACHED [nodejs 5/5] COPY index.js ./                                                                                                                                                                 0.0s
- => [nodejs] exporting to image                                                                                                                                                                          0.0s
- => => exporting layers                                                                                                                                                                                  0.0s
- => => writing image sha256:dbece47d76e6afb9b75d1a0585afd73de40ac6fa3a6edf7af55b63cdc07d7a98                                                                                                             0.0s
- => => naming to docker.io/library/sampleapp-nodejs                                                                                                                                                      0.0s
+.
+.
+.
  => [nginx internal] load .dockerignore                                                                                                                                                                  0.0s
  => => transferring context: 2B                                                                                                                                                                          0.0s
  => [nginx internal] load build definition from Dockerfile.nginx                                                                                                                                         0.0s
  => => transferring dockerfile: 535B                                                                                                                                                                     0.0s
  => [nginx internal] load metadata for docker.io/openresty/openresty:latest                                                                                                                              0.7s
- => [nginx 1/5] FROM docker.io/openresty/openresty:latest@sha256:3be14f2f85081bf11b276faccb204999f90f9c04282b7a32c478b87b8ee0f11a                                                                        0.0s
- => [nginx internal] load build context                                                                                                                                                                  0.0s
- => => transferring context: 10.01kB                                                                                                                                                                     0.0s
- => CACHED [nginx 2/5] COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf                                                                                                                        0.0s
- => [nginx 3/5] COPY rate_limit.lua /usr/local/openresty/lualib/rate_limit.lua                                                                                                                           0.2s
- => [nginx 4/5] COPY nelly_configuration.lua /usr/local/openresty/lualib/nelly_configuration.lua                                                                                                         0.0s
- => [nginx 5/5] COPY limits.json /usr/local/openresty/nginx/conf/limits.json                                                                                                                             0.0s
- => [nginx] exporting to image                                                                                                                                                                           0.1s
- => => exporting layers                                                                                                                                                                                  0.1s
- => => writing image sha256:c10af67babebbd09f2eb21fd39a7aef7f29a340fbaf50d0a5445d06200ebdda9                                                                                                             0.0s
- => => naming to docker.io/library/sampleapp-nginx                                                                                                                                                       0.0s
-[+] Running 5/5
- ✔ Network sampleapp_default                                                                                                                            Created                                          0.0s
- ✔ Container nodejs                                                                                                                                     Started                                          0.0s
- ✔ Container redis                                                                                                                                      Started                                          0.0s
+                                                                                                                                   Started                                          0.0s
  ✔ Container nginx                                                                                                                                      Started                                          0.0s
  ! nginx The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested                                                  0.0s
 NodeJS app and openresty responding and warmed up..... starting tests
