@@ -341,7 +341,7 @@ It is!
 ]
 ```
 
-* limit_class: the class of the limit.  Should assume one of three values: "product", "plan", "conditional", "allowlist"
+* limit_class: the class of the limit.  Should assume one of four values: "product", "plan", "conditional", "allowlist"
 * "product" and "plan" limits are in the same redis key "nelly_configuration"
 * "conditional" limits are in a different redis node (since they are more volatile) "nelly_conditional_limits"
 * "allowlist" limits are in "nelly_allowlist"
