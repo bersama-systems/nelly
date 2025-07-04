@@ -23,5 +23,6 @@ EXPOSE 3008
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node healthcheck.js
 
+ENV PORT=3008
 # Define the command to run the application
 CMD ["npm", "start"]
