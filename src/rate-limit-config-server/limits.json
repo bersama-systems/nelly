@@ -1,0 +1,290 @@
+[
+  {
+    "limit_class": "plan",
+    "name": "A Particular Product API Plan Limits",
+    "uri": "/api/.*",
+    "limit_key": [
+      "ngx.var.http_x_account_plan",
+      "ngx.var.http_x_account_id"
+    ],
+    "limits": [
+      {
+        "condition": {
+          "name": "Particular Product Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "6a121832-2d8c-442b-ad59-6ddcbae8a43b"
+        },
+        "threshold": 300,
+        "interval_seconds": 60,
+        "id": "fba15592-f363-4628-8b95-2bd1f5a4b800"
+      },
+      {
+        "condition": {
+          "name": "Particular Product Plan Type Fallback",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "776c73e6-4951-4916-a31a-72ea720475ee"
+        },
+        "threshold": 5,
+        "interval_seconds": 60,
+        "id": "8fae900e-c5d5-4b47-9aa0-6fbc799f3d88"
+      }
+    ],
+    "id": "186d8b54-e1c1-429d-871e-f50299cb01cf"
+  },
+  {
+    "limit_class": "plan",
+    "name": "Blanket Plan Limits",
+    "limit_key": [
+      "ngx.var.http_x_account_plan",
+      "ngx.var.http_x_account_id"
+    ],
+    "limits": [
+      {
+        "condition": {
+          "name": "Blanket Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "fb3450f3-7d82-4a8b-b337-2248b3754776"
+        },
+        "threshold": 100,
+        "interval_seconds": 60,
+        "id": "16a980c6-2df5-44c3-83b4-bba5dcef35e9"
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold for plans",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "fcb47af1-eeb7-4f85-a0d4-d2abdae30150"
+        },
+        "threshold": 4,
+        "interval_seconds": 60,
+        "id": "d17262fb-3db0-4d26-baa5-800669bbf6d0"
+      }
+    ],
+    "id": "29abbfec-84e7-4ee7-a6cd-eac9b75164d6"
+  },
+  {
+    "limit_class": "product",
+    "name": "Limit on example controller endpoint (index)",
+    "short_name": "example_controller_index",
+    "verb": "GET",
+    "uri": "/api/example",
+    "limit_key": [
+      "ngx.var.http_x_account_id",
+      "ngx.var.request_method",
+      "ngx.var.uri"
+    ],
+    "limits": [
+      {
+        "condition": {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "43e767a4-37b8-420a-b3d6-d6ae641180ea"
+        },
+        "threshold": 200,
+        "interval_seconds": 60,
+        "id": "fa5fbcbf-937a-47b1-9ef0-161da5488a01"
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "3b62f12e-f9d2-4170-8be3-1c6ba0813f89"
+        },
+        "threshold": 60,
+        "interval_seconds": 60,
+        "id": "d29086dc-e47c-44be-b13a-76505a70eaa2"
+      }
+    ],
+    "id": "a5ad4626-0510-4cce-9885-82b81f92c26b"
+  },
+  {
+    "limit_class": "product",
+    "name": "Limit on example controller with id (Show)",
+    "short_name": "example_controller_show",
+    "verb": "GET",
+    "uri": "/api/example/\\d+",
+    "limit_key": [
+      "ngx.var.http_x_account_id",
+      "ngx.var.request_method",
+      "ngx.var.uri"
+    ],
+    "limits": [
+      {
+        "condition": {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "685b530c-ee29-4020-98d0-b4656d306826"
+        },
+        "threshold": 300,
+        "interval_seconds": 60,
+        "id": "fa1dec63-642c-4fba-9a4f-521adea6cf85"
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "3faf5ab3-af4c-41ce-9406-6598c6ec2eaf"
+        },
+        "threshold": 60,
+        "interval_seconds": 60,
+        "id": "f0d0d742-e46c-42bd-8a64-fa4ce32ea212"
+      }
+    ],
+    "id": "de0d946b-182d-4da1-94bd-6b96f4564f4c"
+  },
+  {
+    "limit_class": "product",
+    "name": "Limit on example controller with id (Put update)",
+    "short_name": "example_controller_write",
+    "verb": "PUT",
+    "uri": "/api/example/\\d+",
+    "limit_key": [
+      "ngx.var.http_x_account_id",
+      "ngx.var.request_method",
+      "ngx.var.uri"
+    ],
+    "limits": [
+      {
+        "condition": {
+          "name": "Plan Type 1",
+          "lhs": "ngx.var.http_x_account_plan",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "eaed49e4-7781-424f-b5ad-2abfbaf53df2"
+        },
+        "threshold": 5,
+        "interval_seconds": 1,
+        "id": "00b15140-76d0-4380-a957-b9974803a3a5"
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "e6dead2b-a611-4138-a3ef-78b9b95c89b0"
+        },
+        "threshold": 1,
+        "interval_seconds": 1,
+        "id": "dd76c67d-c4c3-45f6-ae4e-9d4f710e6919"
+      }
+    ],
+    "id": "82cc0577-f72a-4126-bf49-830a9894ffc1"
+  },
+  {
+    "limit_class": "product",
+    "name": "get ",
+    "short_name": "example_controller_composite_condition_read",
+    "verb": "GET",
+    "uri": "/api/example/composite_condition",
+    "limit_key": [
+      "ngx.var.http_x_account_id",
+      "ngx.var.request_method",
+      "ngx.var.uri"
+    ],
+    "limits": [
+      {
+        "condition": {
+          "name": "Plan Type 1",
+          "lhs": {
+            "name": "Plan Type 1",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs": "1",
+            "id": "ef4a0da3-5d2a-4abb-8ef6-cb4d10661c02"
+          },
+          "operator": "or",
+          "rhs": {
+            "name": "Plan Type 99",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs": "99",
+            "id": "d5938e3b-b9c7-4d8d-840e-322d9012f8a8"
+          },
+          "id": "921d7240-c9f8-424c-a8ca-95dc83d227e5"
+        },
+        "threshold": 200,
+        "interval_seconds": 60,
+        "id": "34081c84-deb9-412c-9450-697854e80761"
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "787f3482-acb5-442d-8d01-056cf82ee7e3"
+        },
+        "threshold": 60,
+        "interval_seconds": 60,
+        "id": "4438a1e6-4b7f-4f96-9ada-12f8f9f52c62"
+      }
+    ],
+    "id": "ef719875-3758-447c-8e1a-e6525679537c"
+  },
+  {
+    "limit_class": "product",
+    "name": "Wildcard Verb",
+    "short_name": "api_domain_wildcard",
+    "uri": "/api/wildcard_verb",
+    "limit_key": [
+      "ngx.var.http_x_account_id",
+      "ngx.var.uri"
+    ],
+    "limits": [
+      {
+        "condition": {
+          "name": "Plan Type 1",
+          "lhs": {
+            "name": "Plan Type 1",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs": "1",
+            "id": "741709ad-2770-4354-ac56-52284ecd24c7"
+          },
+          "operator": "or",
+          "rhs": {
+            "name": "Plan Type 99",
+            "lhs": "ngx.var.http_x_account_plan",
+            "operator": "eq",
+            "rhs": "99",
+            "id": "af763d6a-b95f-49cc-b0b7-622818cc08e8"
+          },
+          "id": "db51086a-8210-4a5e-88d0-a1b90398b0f5"
+        },
+        "threshold": 200,
+        "interval_seconds": 60,
+        "id": "66466aba-ae3b-4513-87f1-2bfd0b639830"
+      },
+      {
+        "condition": {
+          "name": "Fallback threshold",
+          "lhs": "1",
+          "operator": "eq",
+          "rhs": "1",
+          "id": "eba757f6-0c1a-4d5b-a02c-c4ac65722a89"
+        },
+        "threshold": 60,
+        "interval_seconds": 60,
+        "id": "dd2f2682-ffb2-413e-bf23-52f293dadb0c"
+      }
+    ],
+    "id": "c9aaec46-0dc3-4400-8809-947aa2f1cfc4"
+  }
+]

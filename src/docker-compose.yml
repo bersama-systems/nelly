@@ -6,6 +6,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+  rate-limit-config-server:
+    build:
+      context: ./rate-limit-config-server
+      dockerfile: Dockerfile
+    ports:
+      - "3008:3008"
   redis:
     image: redis:latest
     ports:
@@ -31,3 +37,4 @@ services:
     depends_on:
       - redis
       - nodejs
+      - rate-limit-config-server

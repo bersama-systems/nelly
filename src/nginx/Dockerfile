@@ -10,6 +10,7 @@ RUN apt-get update
 RUN apt-get install -y procps
 # Expose port 80
 EXPOSE 80
-
+EXPOSE 3000
+EXPOSE 3008
 # Command to run OpenResty
 CMD ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
