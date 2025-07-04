@@ -29,6 +29,7 @@ services:
     command: |
       "/redis-values-init.sh && echo 'Initialization done!'"
   nginx:
+    platform: linux/arm64
     build:
       context: ./nginx
       dockerfile: Dockerfile
