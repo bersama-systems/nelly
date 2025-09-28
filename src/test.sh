@@ -27,11 +27,11 @@ if [ "$response" -ne 200 ]; then
   exit -127
 fi
 
-if [ $1 = "short_circuit" ]; then
+if [ "$1" -e "short_circuit" ]; then
    echo "short circuit exit"
    exit 0
 fi
-if [ $2 = "short_circuit" ]; then
+if [ "$2" -e "short_circuit" ]; then
    echo "short circuit exit"
    exit 0
 fi
