@@ -19,6 +19,7 @@ services:
     volumes:
       - ./limits.json:/limits.json
       - ./allowlist.json:/allowlist.json
+      - ./account_id_network_allowlist.json:/account_id_network_allowlist.json
       - ./redis-values-init.sh:/redis-values-init.sh
     entrypoint: [ "/bin/sh", "-c" ]
     command: |

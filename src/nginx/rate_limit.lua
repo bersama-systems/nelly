@@ -1,5 +1,6 @@
 -- Load the Lua Redis library
 local redis = require "resty.redis"
+local ipmatcher = require("resty.ipmatcher")
 
 function is_array(table)
   if type(table) ~= 'table' then
@@ -236,7 +237,7 @@ end
 
 local function get_and_initialize_configuration(limit_class)
 
-   ngx.log(ngx.ERR, "NGINX starting initialization: get_and_initialize_configuration for class:" .. limit_class .. "\n")
+   ngx.log(ngx.INFO, "NGINX starting initialization: get_and_initialize_configuration for class:" .. limit_class .. "\n")
 -- Connect to Redis
    local red = connect_to_redis()
    if not red then
@@ -250,6 +251,8 @@ local function get_and_initialize_configuration(limit_class)
       res, err = red:get("nelly_conditional_limits")
     elseif limit_class == "allowlist" then
         res, err = red:get("nelly_allowlist")
+    elseif limit_class == "account_id_network_allowlist" then
+        res, err = red:get("account_id_network_allowlist")
     end
     close_redis(red)
     if not res then
@@ -265,7 +268,7 @@ local function get_and_initialize_configuration(limit_class)
     -- Parse the JSON data
     local json_data, err = cjson.decode(json_str)
     if not json_data then
-        ngx.log(ngx.ERR, "Failed to decode JSON file:", err)
+        ngx.log(ngx.ERR, "Failed to decode JSON file:", limit_class, err)
         return nil, "could not parse JSON"
     end
 
@@ -275,6 +278,12 @@ local function get_and_initialize_configuration(limit_class)
     local product_nodes = {}
     local conditional_nodes = {}
     local allowlist_nodes = {}
+
+    if limit_class == "account_id_network_allowlist" then
+        ngx.shared.account_id_network_allowlist = json_data
+        ngx.log(ngx.INFO, "Nelly loaded account_id_network_allowlist nodes\n")
+        return nil, nil
+    end
 
     for _, node in ipairs(json_data) do
         if node.limit_class == "plan" then
@@ -292,15 +301,23 @@ local function get_and_initialize_configuration(limit_class)
     if limit_class == "product" or limit_class == "plan" then
         ngx.shared.plan_nodes = plan_nodes
         ngx.shared.product_nodes = product_nodes
-        ngx.log(ngx.ERR, "Nelly loaded plan and product nodes\n")
+        ngx.log(ngx.INFO, "Nelly loaded plan and product nodes\n")
     elseif limit_class == "conditional" then
         ngx.shared.conditional_nodes = conditional_nodes
-        ngx.log(ngx.ERR, "Nelly loaded conditional nodes\n")
+        ngx.log(ngx.INFO, "Nelly loaded conditional nodes\n")
     elseif limit_class == "allowlist" then
          ngx.shared.allowlist_nodes = allowlist_nodes
-         ngx.log(ngx.ERR, "Nelly loaded conditional nodes\n")
+         ngx.log(ngx.INFO, "Nelly loaded conditional nodes\n")
     end
 
+end
+
+local function account_id_network_allowlist(ngx, allowlist, account_id, remote_addr)
+    if not allowlist or not allowlist[account_id] then
+        return true
+    end
+    local ip = ipmatcher.new(allowlist[account_id])
+    return ip:match(remote_addr)
 end
 
 local function allowlist(ngx, nodes, request_verb, request_uri)
@@ -358,5 +375,6 @@ end
 return {
     rate_limit = rate_limit,
     allowlist = allowlist,
+    account_id_network_allowlist = account_id_network_allowlist,
     get_and_initialize_configuration = get_and_initialize_configuration
 }
