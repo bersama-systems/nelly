@@ -69,7 +69,7 @@ local function find_best_match(limit_class, ngx, nodes, request_verb, request_ur
     local best_score = -1
 
     if not nodes then
-        ngx.log(ngx.ERR, "find_best_match: no nodes for class:", limit_class)
+        ngx.log(ngx.INFO, "find_best_match: no nodes for class:", limit_class)
         return best_match
     end
 
@@ -154,7 +154,7 @@ local function find_best_limit(ngx, node)
         limit = node.limits[i]
         i = i + 1
         if limit and limit.condition then
-            result, err = evaluate_condition(ngx, limit.condition)
+            local result, err = evaluate_condition(ngx, limit.condition)
             if err then
                 ngx.log(ngx.ERR, "***** DEBUG: CONDITION EVALUATED WITH ERROR  ", limit.condition.name, err)
             elseif result then
@@ -268,7 +268,7 @@ local function get_and_initialize_configuration(limit_class)
     -- Parse the JSON data
     local json_data, err = cjson.decode(json_str)
     if not json_data then
-        ngx.log(ngx.ERR, "Failed to decode JSON file:", limit_class, err)
+        ngx.log(ngx.INFO, "Failed to decode JSON file:", limit_class, err)
         return nil, "could not parse JSON"
     end
 
