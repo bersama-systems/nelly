@@ -8,11 +8,23 @@ fi
 
 ./start.sh
 
+generate_random() {
+  local exclusion=$1
+  local random_number
+  while :; do
+    random_number=$RANDOM
+    if [ "$random_number" -ne "$exclusion" ]; then
+      echo "$random_number"
+      return
+    fi
+  done
+}
+
 # Ensure the system is up and running by polling our server for a single result
 
 response=""
 var=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 response=$(curl --header "x-account-plan: 0"  --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/uncovered_product_limit)
 
 while [ "$response" != 200 ] && [ "$var" -le 10 ];
@@ -39,7 +51,7 @@ echo "NodeJS app and openresty responding and warmed up..... starting tests"
 
 echo "Testing allowlist, let us begin with something that should FAIL with 404"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 response=$(curl --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/bonkers_uncovered_product_limit)
 if [ "$response" -ne 404 ]; then
     echo "Allowlist failed!!! $response"
@@ -48,7 +60,7 @@ fi
 echo "Testing Plan limits on uncovered product limits"
 echo "Testing support lower plan limit GETS"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..50}
 do
   response=$(curl --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/uncovered_product_limit)
@@ -74,7 +86,7 @@ fi
 
 echo "Testing higher plan limit GETS"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..500}
 do
   response=$(curl --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/uncovered_product_limit)
@@ -100,7 +112,7 @@ fi
 
 echo "Testing blanket lower plan limit GETS"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..50}
 do
   response=$(curl --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/foo)
@@ -126,7 +138,7 @@ fi
 
 echo "Testing higher blanket plan limit GETS"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..500}
 do
   response=$(curl --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/foo)
@@ -154,7 +166,7 @@ echo "Testing massive GETS on /api/example"
 
 echo "Testing lower plan limit GETS"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..1000}
 do
   response=$(curl --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example)
@@ -177,7 +189,7 @@ echo "Got off $successful_requests requests for lower plan limit"
 
 echo "Testing lower plan limit GETS with random query string"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..1000}
 do
   response=$(curl --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null "http://localhost/api/example?account_id=$account_id")
@@ -199,7 +211,7 @@ echo "Got off $successful_requests requests for lower plan limit with random que
 
 echo "Testing upper plan limit GETS"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..365}
 do
   response=$(curl --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example)
@@ -220,7 +232,7 @@ echo "Testing massive PUTS on /api/example/1"
 
 echo "Testing lower plan limit PUTS"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..100}
 do
   value="$RANDOM foo"
@@ -242,7 +254,7 @@ done
 echo "Got off $successful_requests requests for lower plan limit PUTS"
 echo "Testing upper plan limit PUTS"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..365}
 do
   value="$RANDOM foo"
@@ -265,7 +277,7 @@ echo "Testing massive GETS on /api/example/composite_condition"
 
 echo "Testing lower plan limit GETS for composite condition"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..100}
 do
   response=$(curl --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example/composite_condition)
@@ -286,7 +298,7 @@ done
 echo "Got off $successful_requests requests for lower plan limit on composite condition"
 echo "Testing upper plan limit GETS for composite condition"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..365}
 do
   response=$(curl --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example/composite_condition)
@@ -305,7 +317,7 @@ echo "Got off $successful_requests requests for upper plan limit GET for composi
 
 echo "Testing upper plan limit GETS for composite condition"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..365}
 do
   response=$(curl --header "x-account-plan: 99" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example/composite_condition)
@@ -323,7 +335,7 @@ echo "Got off $successful_requests requests for upper plan limit GET for composi
 
 echo "Testing upper plan limit PUTS for composite condition and wildcard verb"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..365}
 do
   response=$(curl -X PUT --header "x-account-plan: 99" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/wildcard_verb)
@@ -341,7 +353,7 @@ echo "Got off $successful_requests requests for upper plan limit GET for composi
 
 echo "Testing second upper plan limit GETS for composite condition and wildcard verb"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..365}
 do
   response=$(curl --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/wildcard_verb)
@@ -360,7 +372,7 @@ echo "Got off $successful_requests requests for upper plan limit GET for composi
 
 echo "Testing second upper plan limit GETS for composite condition and wildcard verb"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..365}
 do
   response=$(curl --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/wildcard_verb)
@@ -378,7 +390,7 @@ echo "Got off $successful_requests requests for upper plan limit GET for composi
 
 echo "Testing fallback plan limit GETS for composite condition and wildcard verb"
 successful_requests=0
-account_id=$RANDOM
+account_id=$(generate_random 6)
 for i in {1..365}
 do
   response=$(curl --header "x-account-plan: 12" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/wildcard_verb)
@@ -425,6 +437,13 @@ if [ "$successful_requests" -gt 5 ];
   then
     echo "conditional Account Rate limiting failed!!! $successful_requests"
     exit -127
+fi
+
+echo "Testing account_id network allowlist"
+response=$(curl --header "x-account-plan: 1" --header "x-account-id: 6" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example)
+if [ "$response" -ne 404 ]; then
+   echo "conditional Account Rate limiting failed!!! $response"
+   exit -127
 fi
 
 echo "*****Suite success!!!*****"
