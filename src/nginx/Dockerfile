@@ -5,6 +5,7 @@ FROM openresty/openresty:latest
 # Copy NGINX configuration file and Lua script
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY rate_limit.lua /usr/local/openresty/lualib/rate_limit.lua
+COPY ipmatcher.lua /usr/local/openresty/lualib/resty/ipmatcher.lua
 RUN mkdir -p /var/log/nginx
 RUN apt-get update
 RUN apt-get install -y procps
