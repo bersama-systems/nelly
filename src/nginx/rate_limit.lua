@@ -2,6 +2,38 @@
 local redis = require "resty.redis"
 local ipmatcher = require("resty.ipmatcher")
 
+
+function extract_nth_id(path, id_type, n)
+  local patterns = {
+    guid = "[a-fA-F0-9]{8}%-[a-fA-F0-9]{4}%-[a-fA-F0-9]{4}%-[a-fA-F0-9]{4}%-[a-fA-F0-9]{12}",
+    integer = "%d+",
+    ulid = "[0-9A-HJKMNP-TV-Z]{26}"
+  }
+
+  local pattern = patterns[id_type]
+  if not pattern then
+    ngx.log(ngx.ERR, "Unsupported id_type: " .. tostring(id_type))
+  end
+  if not path then
+    ngx.log(ngx.ERR, "Path is nil")
+    return nil
+  end
+  local count = 0
+  local start_pos = 1
+  while true do
+    local s, e = string.find(path, pattern, start_pos)
+    if not s then
+      return nil
+    end
+
+    count = count + 1
+    if count == n then
+      return string.sub(path, s, e)
+    end
+    start_pos = e + 1
+  end
+end
+
 function is_array(table)
   if type(table) ~= 'table' then
     return false
@@ -60,6 +92,15 @@ local function get_key_value(limit_key)
             return ngx.var[extracted_name]
         end
         return (limit_key .. ":" .. "nil")
+    elseif string.match(limit_key, "extract_nth_id%((.+),%s*(.+),%s*(%d+)%)") then
+        local path, id_type, n = string.match(limit_key, "extract_nth_id%((.+),%s*(.+),%s*(%d+)%)")
+        n = tonumber(n)
+        local extracted_id = extract_nth_id(ngx.var[path], id_type, n)
+        if extracted_id then
+            return extracted_id
+        else
+            return (limit_key .. ":" .. "nil")
+        end
     end
     return limit_key
 end

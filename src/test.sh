@@ -411,6 +411,53 @@ if [ "$successful_requests" -gt 5 ];
 fi
 echo "Got off $successful_requests requests for upper plan limit GET for composite_condition"
 
+
+
+echo "Testing positional plan limit GETS for composite condition and wildcard verb"
+successful_requests=0
+account_id=$(generate_random 6)
+for i in {1..365}
+do
+  controller_verb="write"
+  if (( i % 2 == 0 )); then
+    controller_verb="read"
+  fi
+  response=$(curl --header "x-account-plan: 1" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/chat/69420/$controller_verb)
+  if [ "$response" -eq 429 ]; then
+    break
+  fi
+  successful_requests=$((successful_requests+1))
+  if [ "$i" -gt 200 ];
+  then
+    echo "Rate limiting failed!!!"
+    exit -127
+  fi
+done
+echo "Got off $successful_requests requests for positional plan limit GETS for composite condition and wildcard verb"
+
+
+echo "Testing positional unknown plan limit GETS for composite condition and wildcard verb"
+successful_requests=0
+account_id=$(generate_random 6)
+for i in {1..365}
+do
+  controller_verb="write"
+  if (( i % 2 == 0 )); then
+    controller_verb="read"
+  fi
+  response=$(curl --header "x-account-plan: 69420" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/chat/69420/$controller_verb)
+  if [ "$response" -eq 429 ]; then
+    break
+  fi
+  successful_requests=$((successful_requests+1))
+  if [ "$i" -gt 60 ];
+  then
+    echo "Rate limiting failed!!!"
+    exit -127
+  fi
+done
+echo "Got off $successful_requests requests for positional unknown plan limit GETS for composite condition and wildcard verb"
+
 echo "Testing conditional rate limits"
 
 cat conditional_limits.json | redis-cli -x SET nelly_conditional_limits
