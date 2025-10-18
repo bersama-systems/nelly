@@ -33,5 +33,10 @@
     "limit_class" : "allowlist",
     "name": "wildcard verb",
     "uri" : "\/api\/wildcard_verb"
-  }
+  },
+    {
+        "limit_class" : "allowlist",
+        "name": "wildcard uri on chat",
+        "uri" : "^/api/chat/\\d+/(read|write)$"
+    }
 ]

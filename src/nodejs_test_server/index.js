@@ -78,6 +78,14 @@ app.post('/api/example/object/:id/subobject', (req, res) => {
   res.send('Hello from the POST example sub object API endpoint!', 200);
 });
 
+app.post('/api/chat/:id/write', (req, res) => {
+  res.status = 200;
+  res.send('Hello from the POST example chat object API endpoint!', 200);
+});
+app.get('/api/chat/:id/read', (req, res) => {
+  res.status = 200;
+  res.send('Hello from the GET example chat object API endpoint!', 200);
+});
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
