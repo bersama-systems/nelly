@@ -4,6 +4,21 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// Suppress benign ResizeObserver loop error (Chrome quirk) so it doesn't surface in overlay
+(function() {
+  const ignoredMsg = 'ResizeObserver loop completed with undelivered notifications.';
+  window.addEventListener('error', (e) => {
+    if (e.message && e.message.includes(ignoredMsg)) {
+      e.preventDefault();
+    }
+  });
+  const origConsoleError = console.error;
+  console.error = function(...args) {
+    if (args.length && typeof args[0] === 'string' && args[0].includes('ResizeObserver loop completed')) return;
+    origConsoleError.apply(console, args);
+  };
+})();
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

@@ -1,5 +1,6 @@
 // src/pages/Home.js
 import { useEffect } from 'react';
+import Sparkles from '../components/Sparkles';
 
 function Home() {
     useEffect(() => {
@@ -8,9 +9,10 @@ function Home() {
     }, []);
 
     return (
-        <div className="page home">
-            <h1>Welcome to Rate Limit Administration</h1>
-            <p>Select a menu item to manage your rate limiting configuration.</p>
+        <div className="page home" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '80vh', position: 'relative', zIndex: 1 }}>
+            <Sparkles />
+            <h1 style={{ textAlign: 'center' }}>Welcome to Nelly</h1>
+            <img src="/horse.png" alt="Horse" style={{ maxWidth: '400px', width: '100%' }} />
         </div>
     );
 }
