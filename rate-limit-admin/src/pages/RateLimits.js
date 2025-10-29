@@ -1,5 +1,6 @@
 // src/pages/RateLimits.js
 import { useEffect } from 'react';
+import LimitsEditor from '../components/LimitsEditor';
 
 function RateLimits() {
     useEffect(() => {
@@ -10,6 +11,7 @@ function RateLimits() {
     return (
         <div className="page rate-limits">
             <h1>Rate Limits Configuration</h1>
+            <LimitsEditor />
         </div>
     );
 }

@@ -1,5 +1,6 @@
 // src/pages/AllowList.js
 import { useEffect } from 'react';
+import AllowlistEditor from '../components/AllowlistEditor';
 
 function AllowList() {
     useEffect(() => {
@@ -10,6 +11,7 @@ function AllowList() {
     return (
         <div className="page allow-list">
             <h1>Allow List Configuration</h1>
+            <AllowlistEditor />
         </div>
     );
 }
