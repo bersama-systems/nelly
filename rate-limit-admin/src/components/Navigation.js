@@ -15,7 +15,7 @@ function Navigation() {
                     <NavLink to="/allow-list">Allow List</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/network-access">Network Access</NavLink>
+                    <NavLink to="/network-access">Account-Network Access</NavLink>
                 </li>
                 <li>
                     <NavLink to="/conditional-rate-limits">Conditional Rate Limits</NavLink>
