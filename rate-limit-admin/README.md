@@ -18,7 +18,7 @@ This is a simple admin dashboard for managing rate limits in your application. I
 npm install
 npm start
 ```
-The dashboard will be accessible at `http://localhost:3000` by default.
+The dashboard will be accessible at `http://localhost:3001` by default.
 
 ## Running the API server
 ```
