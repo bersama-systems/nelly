@@ -6,8 +6,9 @@
 
 .navigation {
   width: 250px;
-  background-color: #f5f5f5;
+  background-color: #222;
   padding: 20px;
+  color: #f5f5f5;
 }
 
 .navigation ul {
@@ -22,27 +23,34 @@
 
 .navigation a {
   text-decoration: none;
-  color: #333;
+  color: #f5f5f5;
   padding: 8px 12px;
   display: block;
   border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
 }
 
 .navigation a:hover {
-  background-color: #e0e0e0;
+  background-color: #333;
+  color: #ffd700;
 }
 
 .navigation a.active {
   background-color: #007bff;
-  color: white;
+  color: #fff;
 }
 
 .content {
   flex: 1;
   padding: 20px;
+  background: transparent;
+  color: #f5f5f5;
 }
 
 .page {
   max-width: 1200px;
   margin: 0 auto;
+  background: transparent;
+  color: #f5f5f5;
 }
+iframe#webpack-dev-server-client-overlay{display:none!important}

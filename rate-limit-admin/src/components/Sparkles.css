@@ -1,0 +1,47 @@
+.sparkles-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sparkle {
+  position: absolute;
+  background: radial-gradient(circle, #fff 60%, var(--color-start) 100%);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 8px 2px #fff8e1;
+  /* Fallback drift and hue values */
+  --drift-x: 0px;
+  --drift-y: 18px;
+  --color-start: #ffecb3;
+  --color-end: white;
+  animation: sparkle-fade 4s infinite, sparkle-dance 4s infinite, sparkle-color 4s infinite;
+  will-change: transform, opacity, background, box-shadow;
+}
+
+@keyframes sparkle-fade {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Updated dance to include horizontal (var(--drift-x)) and downward (var(--drift-y)) drift at the end */
+@keyframes sparkle-dance {
+  0% { transform: translate(0, 0) scale(1); }
+  35% { transform: translate(0, -12px) scale(1.2); }
+  60% { transform: translate(0, 0) scale(1); }
+  90% { transform: translate(calc(var(--drift-x) * 0.85), calc(var(--drift-y) * 0.65)) scale(0.9); }
+  100% { transform: translate(var(--drift-x), var(--drift-y)) scale(0.85); }
+}
+
+@keyframes sparkle-color {
+  0% { background: radial-gradient(circle, #fff 60%, var(--color-start) 100%); box-shadow: 0 0 8px 2px #fff8e1; }
+  60% { background: radial-gradient(circle, #fff 60%, var(--color-start) 100%); box-shadow: 0 0 8px 2px #fff8e1; }
+  80% { background: radial-gradient(circle, #fff 55%, var(--color-end) 100%); box-shadow: 0 0 10px 3px var(--color-end); }
+  100% { background: radial-gradient(circle, #fff 40%, var(--color-end) 100%); box-shadow: 0 0 12px 4px var(--color-end); }
+}
