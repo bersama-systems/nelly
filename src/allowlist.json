@@ -21,7 +21,8 @@
     "limit_class" : "allowlist",
     "verb" : ["PUT", "GET"],
     "name": "get or put example",
-    "uri" : "\/api\/example\/\\d+"
+    "uri" : "\/api\/example\/\\d+",
+    "body_limit": 1024
   },
   {
     "limit_class" : "allowlist",

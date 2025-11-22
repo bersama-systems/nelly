@@ -20,6 +20,21 @@ generate_random() {
   done
 }
 
+generate_random_letters() {
+  local n=$1
+  local result=""
+  for ((i = 0; i < n; i++)); do
+    local random_number
+    random_number=$(generate_random 0)
+    # Map random number to ASCII range for letters (A-Z: 65-90, a-z: 97-122)
+    if ((random_number % 2 == 0)); then
+      result+=$(printf "\\$(printf '%03o' $((random_number % 26 + 65)))") # Uppercase
+    else
+      result+=$(printf "\\$(printf '%03o' $((random_number % 26 + 97)))") # Lowercase
+    fi
+  done
+  echo "$result"
+}
 # Ensure the system is up and running by polling our server for a single result
 
 response=""
@@ -491,6 +506,19 @@ response=$(curl --header "x-account-plan: 1" --header "x-account-id: 6" --write-
 if [ "$response" -ne 404 ]; then
    echo "conditional Account Rate limiting failed!!! $response"
    exit -127
+fi
+
+
+echo "Testing body size limit PUT"
+successful_requests=0
+account_id=$(generate_random 6)
+random_string=$(generate_random_letters 1024)
+echo "Generated random string of size ${#random_string}"
+response=$(curl -X PUT -H "Content-Type: application/json" -d "{\"project\":\"$random_string\"}" --header "x-account-plan: 0" --header "x-account-id: $account_id" --write-out '%{http_code}' --silent --output /dev/null http://localhost/api/example/1)
+
+if [ "$response" -ne 413 ]; then
+  echo "Rate limiting failed body size limit should have been reached!!! $response"
+  exit -127
 fi
 
 echo "*****Suite success!!!*****"

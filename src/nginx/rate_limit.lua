@@ -362,9 +362,9 @@ local function account_id_network_allowlist(ngx, allowlist, account_id, remote_a
 end
 
 local function allowlist(ngx, nodes, request_verb, request_uri)
--- 1. Find the appropriate node we want to rate rate_limit
--- 2. Execute the conditions and easy out on first match.
--- 3. Apply the rate limit and return how long one would wait, along with error encountered.
+    -- 1. Find the appropriate node we want to rate limit
+    -- 2. Execute the conditions and easy out on first match.
+    -- 3. Apply the rate limit and return how long one would wait, along with error encountered.
 
     if not nodes then
         return true, nil
@@ -374,6 +374,31 @@ local function allowlist(ngx, nodes, request_verb, request_uri)
 
     if not best_node then
         return false, nil
+    end
+
+    -- Check if the best_node has a body_limit and the request_verb is a write operation
+    if best_node.body_limit and (request_verb == "POST" or request_verb == "PUT" or request_verb == "PATCH" or request_verb == "DELETE") then
+        ngx.req.read_body()
+        local body_data = ngx.req.get_body_data()
+        local body_size = body_data and #body_data or 0
+
+        -- If the body is stored in a temporary file, get its size
+        if body_size == 0 then
+            local body_file = ngx.req.get_body_file()
+            if body_file then
+                local file = io.open(body_file, "r")
+                if file then
+                    body_size = file:seek("end")
+                    file:close()
+                end
+            end
+        end
+
+        -- Compare the body size with the body_limit
+        if body_size > best_node.body_limit then
+            ngx.log(ngx.ERR, "Request body size exceeds the allowed limit: ", body_size, " > ", best_node.body_limit)
+            return false, "Request body size exceeds the allowed limit"
+        end
     end
 
     return true, nil
